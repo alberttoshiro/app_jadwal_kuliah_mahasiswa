@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.albert.processdata.ProcessJadwalKuliah;
 import com.albert.processdata.ProcessJadwalKuliahMahasiswa;
@@ -18,6 +20,7 @@ public class App
     {
         File masterFolder = new File("data/master");
         File[] listOfFilesMaster = masterFolder.listFiles();
+        List<Thread> threads = new ArrayList<>();
         
         for(File file : listOfFilesMaster) {
         	if(file.isFile()) {
@@ -27,18 +30,30 @@ public class App
         			ProcessMahasiswa task = new ProcessMahasiswa(filePath);
         			Thread t = new Thread(task);
         			t.start();
+        			threads.add(t);
         		} else if(fileName.equals("matakuliah.csv")) {
         			ProcessMatakuliah task = new ProcessMatakuliah(filePath);
         			Thread t = new Thread(task);
         			t.start();
+        			threads.add(t);
         		} else {
         			ProcessJadwalKuliah task = new ProcessJadwalKuliah(filePath);
         			Thread t = new Thread(task);
         			t.start();
+        			threads.add(t);
         		}
 
         	}
         }
+        
+        for (Thread thread : threads) {
+			try {
+				thread.join();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
         
         File composeFolder = new File("data/compose");
         File[] listOfFilesCompose = composeFolder.listFiles();

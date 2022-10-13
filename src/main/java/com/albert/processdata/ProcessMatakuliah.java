@@ -6,6 +6,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+import com.albert.model.Matakuliah;
+import com.albert.postgresql.JDBCPostgreSQLConnect;
 
 public class ProcessMatakuliah implements Runnable {
 	private String filePath;
@@ -25,22 +32,39 @@ public class ProcessMatakuliah implements Runnable {
 
 	@Override
 	public void run() {
+		// Read data and add to database
 		try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+			Connection con;
+			PreparedStatement st;
+			con = JDBCPostgreSQLConnect.getConnection();
+			String sql = "INSERT INTO matakuliah(matakuliah_id, nama_matakuliah) VALUES (?, ?)";
+			st = con.prepareStatement(sql);
+			
 			String line = "";
 			while((line = br.readLine()) != null) {
-//				String[] mahasiswa = line.split(";");
-//				System.out.println("NIM: " + mahasiswa[0] + ", Nama: " + mahasiswa[1]);
-				System.out.println(line);
+				String[] matakuliah = line.split(";");
+//				System.out.println(line);
+				Matakuliah matkul = new Matakuliah(Integer.parseInt(matakuliah[0]), matakuliah[1]);
+				st.setInt(1, matkul.getMatakuliahId());
+				st.setString(2, matkul.getNamaMatakuliah());
+				st.executeUpdate();
 			}
+			
 		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		//Move file to done
-//		try {
-//			Path temp = Files.move(Paths.get(filePath), Paths.get(filePath.replace("master", "master-done")));
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
+		try {
+			Path temp = Files.move(Paths.get(filePath), Paths.get(filePath.replace("master", "master-done")));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

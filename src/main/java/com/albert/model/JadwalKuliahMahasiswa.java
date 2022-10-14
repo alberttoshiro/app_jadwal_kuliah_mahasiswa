@@ -3,14 +3,18 @@ package com.albert.model;
 public class JadwalKuliahMahasiswa {
 
 	private Integer nim;
-	private Integer matakuliahId;
-	private Integer jadwalKuliahId;
+	private String hari;
+	private String namaMatakuliah;
+	private String ruangan;
+	private String jam;
 
-	public JadwalKuliahMahasiswa(Integer nim, Integer matakuliahId, Integer jadwalKuliahId) {
+	public JadwalKuliahMahasiswa(Integer nim, String hari, String namaMatakuliah, String ruangan, String jam) {
 		super();
 		this.nim = nim;
-		this.matakuliahId = matakuliahId;
-		this.jadwalKuliahId = jadwalKuliahId;
+		this.hari = hari;
+		this.namaMatakuliah = namaMatakuliah;
+		this.ruangan = ruangan;
+		this.jam = jam;
 	}
 
 	public Integer getNim() {
@@ -21,20 +25,36 @@ public class JadwalKuliahMahasiswa {
 		this.nim = nim;
 	}
 
-	public Integer getMatakuliahId() {
-		return matakuliahId;
+	public String getHari() {
+		return hari;
 	}
 
-	public void setMatakuliahId(Integer matakuliahId) {
-		this.matakuliahId = matakuliahId;
+	public void setHari(String hari) {
+		this.hari = hari;
 	}
 
-	public Integer getJadwalKuliahId() {
-		return jadwalKuliahId;
+	public String getNamaMatakuliah() {
+		return namaMatakuliah;
 	}
 
-	public void setJadwalKuliahId(Integer jadwalKuliahId) {
-		this.jadwalKuliahId = jadwalKuliahId;
+	public void setNamaMatakuliah(String namaMatakuliah) {
+		this.namaMatakuliah = namaMatakuliah;
+	}
+
+	public String getRuangan() {
+		return ruangan;
+	}
+
+	public void setRuangan(String ruangan) {
+		this.ruangan = ruangan;
+	}
+
+	public String getJam() {
+		return jam;
+	}
+
+	public void setJam(String jam) {
+		this.jam = jam;
 	}
 
 }

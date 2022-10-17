@@ -4,25 +4,22 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 
-import com.albert.model.Matakuliah;
 import com.albert.postgresql.JDBCPostgreSQLConnect;
 
 public class ProcessData implements Runnable {
-	protected String folderName;
-	protected String filePath;
-	protected String query;
+	private String folderName;
+	private String filePath;
+	private String query;
+	private String[] dataType;
 
-	public ProcessData(String folderName, String filePath, String query) {
+	public ProcessData(String folderName, String filePath, String query, String[] dataType) {
 		super();
 		this.folderName = folderName;
 		this.filePath = filePath;
 		this.query = query;
+		this.dataType = dataType;
 	}
 
 	public String getFolderName() {
@@ -49,17 +46,30 @@ public class ProcessData implements Runnable {
 		this.query = query;
 	}
 
-	public void processFile() {
+	public String[] getDataType() {
+		return dataType;
+	}
+
+	public void setDataType(String[] dataType) {
+		this.dataType = dataType;
+	}
+
+	public boolean processFile() {
 		try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
 			String line = "";
 			JDBCPostgreSQLConnect sqlCon = new JDBCPostgreSQLConnect();
 			while((line = br.readLine()) != null) {
 				Object[] param = line.split(";");
-				sqlCon.executeUpdate(query, param);
+//				for(int i = 0 ; i < param.length ; i++) {
+//					System.out.print(param[i].toString() + ", " );
+//				}
+//				System.out.println();
+				sqlCon.executeUpdate(query, param, dataType);
 			}
-			
+			return true;
 		} catch (IOException e) {
 			e.printStackTrace();
+			return false;
 		}
 	}
 
@@ -73,9 +83,9 @@ public class ProcessData implements Runnable {
 
 	@Override
 	public void run() {
-		processFile();
-		moveFile();
-
+		if(processFile()) {
+			moveFile();
+		}
 	}
 
 }

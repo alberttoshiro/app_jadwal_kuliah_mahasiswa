@@ -8,8 +8,8 @@ import com.albert.processdata.ProcessData;
 
 public class FolderListener implements Runnable {
 
-	public Thread newProcessDataThread(String folderName, String filePath, String query) {
-		ProcessData task = new ProcessData(folderName, filePath, query);
+	public Thread newProcessDataThread(String folderName, String filePath, String query, String[] dataType) {
+		ProcessData task = new ProcessData(folderName, filePath, query, dataType);
 		Thread t = new Thread(task);
 		t.start();
 		return t;
@@ -29,18 +29,31 @@ public class FolderListener implements Runnable {
 	        		String fileName = file.getName();
 	        		String filePath = "data/master/" + fileName;
 	        		String query = "";
+	        		String[] dataType;
 	        		boolean correctFile = true;
 	        		if(fileName.startsWith("mahasiswa")) {
 	        			query = "INSERT INTO mahasiswa(nim, nama) VALUES (?, ?)";
+	        			dataType = new String[2];
+	        			dataType[0] = "int";
+	        			dataType[1] = "string";
 	        		} else if(fileName.startsWith("matakuliah")) {
 	        			query = "INSERT INTO matakuliah(matakuliah_id, nama_matakuliah) VALUES (?, ?)";
+	        			dataType = new String[2];
+	        			dataType[0] = "int";
+	        			dataType[1] = "string";
 	        		} else if(fileName.startsWith("jadwal_kuliah")) {
 	        			query = "INSERT INTO jadwal_kuliah(jadwal_kuliah_id, ruangan, hari, jam) VALUES (?, ?, ?, ?)";
+	        			dataType = new String[4];
+	        			dataType[0] = "int";
+	        			dataType[1] = "string";
+	        			dataType[2] = "string";
+	        			dataType[3] = "string";
 	        		} else {
 	        			correctFile = false;
+	        			dataType = null;
 	        		}
 	        		if(correctFile) {
-	        			Thread t = newProcessDataThread(folderMaster, filePath, query);
+	        			Thread t = newProcessDataThread(folderMaster, filePath, query, dataType);
 	        			threads.add(t);
 	        		}
 	        	}
@@ -64,11 +77,9 @@ public class FolderListener implements Runnable {
 					String filePath = "data/compose/" + fileName;
 					String query = "";
 					if(fileName.startsWith("jadwal_kuliah_mahasiswa")) {
-						ProcessJadwalKuliahMahasiswa task = new ProcessJadwalKuliahMahasiswa(filePath);
-	        			Thread t = new Thread(task);
-	        			t.start();
 	        			query = "INSERT INTO jadwal_kuliah_mahasiswa(nim, matakuliah_id, jadwal_kuliah_id) VALUES (?, ?, ?)";
-	        			newProcessDataThread(folderCompose, filePath, query);
+	        			String[] dataType = {"int", "int", "int"};
+	        			newProcessDataThread(folderCompose, filePath, query, dataType);
 					}
 				}
 			}

@@ -78,7 +78,10 @@ public class Search {
 		JDBCPostgreSQLConnect conDB = new JDBCPostgreSQLConnect();
 		List<Mahasiswa> listMahasiswa = getMahasiswa(searchBy, conDB);
 			
-		if(listMahasiswa == null || listMahasiswa.isEmpty()) {
+		if(listMahasiswa == null) {
+			return;
+		}
+		if(listMahasiswa.isEmpty()) {
 			System.out.println("Mahasiswa not found...");
 			return;
 		}

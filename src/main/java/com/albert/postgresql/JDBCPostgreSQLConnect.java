@@ -29,21 +29,9 @@ public class JDBCPostgreSQLConnect {
 		return con;
 	}
 	
-	public void closeConnection() {
-		if(con != null) {
-			try {
-				con.close();
-				con = null;
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-	
-	public PreparedStatement prepareQuery(String query, Object[] param, String[] dataType) {
-		try {
-			Connection con = getConnection(); 
-			PreparedStatement st = con.prepareStatement(query);
+	public void executeUpdate(String query, Object[] param, String[] dataType) {		
+		Connection con = getConnection();
+		try (PreparedStatement st = con.prepareStatement(query)) {
 			if(param != null && dataType != null) {
 				for(int i = 0 ; i < param.length ; i++) {
 					if(dataType[i].equals("int")) {
@@ -53,20 +41,9 @@ public class JDBCPostgreSQLConnect {
 					}
 				}
 			}	
-			return st;
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	public void executeUpdate(String query, Object[] param, String[] dataType) {		
-		try (PreparedStatement st = prepareQuery(query, param, dataType)) {
 			st.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally {
-			closeConnection();
 		}
 	}
 	

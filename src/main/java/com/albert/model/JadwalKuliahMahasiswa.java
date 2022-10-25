@@ -1,60 +1,68 @@
 package com.albert.model;
 
-public class JadwalKuliahMahasiswa {
+import java.time.LocalTime;
 
-	private Integer nim;
-	private String hari;
-	private String namaMatakuliah;
-	private String ruangan;
-	private String jam;
+public class JadwalKuliahMahasiswa extends JadwalKuliah {
 
-	public JadwalKuliahMahasiswa(Integer nim, String hari, String namaMatakuliah, String ruangan, String jam) {
-		super();
-		this.nim = nim;
-		this.hari = hari;
-		this.namaMatakuliah = namaMatakuliah;
-		this.ruangan = ruangan;
-		this.jam = jam;
-	}
+  private static final long serialVersionUID = -6358044350661276227L;
 
-	public Integer getNim() {
-		return nim;
-	}
+  private String idMahasiswa;
+  private String nim;
+  private String idMatakuliah;
+  private String namaMatakuliah;
 
-	public void setNim(Integer nim) {
-		this.nim = nim;
-	}
+  public JadwalKuliahMahasiswa() {
+    super();
+  }
 
-	public String getHari() {
-		return hari;
-	}
+  public JadwalKuliahMahasiswa(String id, LocalTime startTime, LocalTime endTime, String ruangan,
+      String hari, String idMahasiswa, String nim, String idMatakuliah, String namaMatakuliah) {
+    super(id, startTime, endTime, ruangan, hari);
+    this.idMahasiswa = idMahasiswa;
+    this.nim = nim;
+    this.idMatakuliah = idMatakuliah;
+    this.namaMatakuliah = namaMatakuliah;
+  }
 
-	public void setHari(String hari) {
-		this.hari = hari;
-	}
+  public String getIdMahasiswa() {
+    return idMahasiswa;
+  }
 
-	public String getNamaMatakuliah() {
-		return namaMatakuliah;
-	}
+  public String getIdMatakuliah() {
+    return idMatakuliah;
+  }
 
-	public void setNamaMatakuliah(String namaMatakuliah) {
-		this.namaMatakuliah = namaMatakuliah;
-	}
+  public String getNamaMatakuliah() {
+    return namaMatakuliah;
+  }
 
-	public String getRuangan() {
-		return ruangan;
-	}
+  public String getNim() {
+    return nim;
+  }
 
-	public void setRuangan(String ruangan) {
-		this.ruangan = ruangan;
-	}
+  public void setIdMahasiswa(String idMahasiswa) {
+    this.idMahasiswa = idMahasiswa;
+  }
 
-	public String getJam() {
-		return jam;
-	}
+  public void setIdMatakuliah(String idMatakuliah) {
+    this.idMatakuliah = idMatakuliah;
+  }
 
-	public void setJam(String jam) {
-		this.jam = jam;
-	}
+  public void setNamaMatakuliah(String namaMatakuliah) {
+    this.namaMatakuliah = namaMatakuliah;
+  }
+
+  public void setNim(String nim) {
+    this.nim = nim;
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder builder = new StringBuilder();
+    builder.append("JadwalKuliahMahasiswa [idMahasiswa=").append(idMahasiswa).append(", nim=")
+        .append(nim).append(", idMatakuliah=").append(idMatakuliah).append(", namaMatakuliah=")
+        .append(namaMatakuliah).append(", toString()=").append(super.toString()).append("]");
+    return builder.toString();
+  }
 
 }

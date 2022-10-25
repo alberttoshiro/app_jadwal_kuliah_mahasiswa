@@ -1,50 +1,47 @@
 package com.albert.model;
 
-public class JadwalKuliah {
+import java.time.LocalTime;
 
-	private Integer jadwalKuliahId;
-	private String ruangan;
-	private String hari;
-	private String jam;
+public class JadwalKuliah extends BaseScheduleTable {
 
-	public JadwalKuliah(Integer jadwalKuliahId, String ruangan, String hari, String jam) {
-		super();
-		this.jadwalKuliahId = jadwalKuliahId;
-		this.ruangan = ruangan;
-		this.hari = hari;
-		this.jam = jam;
-	}
+  private static final long serialVersionUID = 7167094102699512026L;
 
-	public Integer getJadwalKuliahId() {
-		return jadwalKuliahId;
-	}
+  private String ruangan;
+  private String hari;
 
-	public void setJadwalKuliahId(Integer jadwalKuliahId) {
-		this.jadwalKuliahId = jadwalKuliahId;
-	}
+  public JadwalKuliah() {
+    super();
+  }
 
-	public String getRuangan() {
-		return ruangan;
-	}
+  public JadwalKuliah(String id, LocalTime startTime, LocalTime endTime, String ruangan,
+      String hari) {
+    super(id, startTime, endTime);
+    this.ruangan = ruangan;
+    this.hari = hari;
+  }
 
-	public void setRuangan(String ruangan) {
-		this.ruangan = ruangan;
-	}
+  public String getHari() {
+    return hari;
+  }
 
-	public String getHari() {
-		return hari;
-	}
+  public String getRuangan() {
+    return ruangan;
+  }
 
-	public void setHari(String hari) {
-		this.hari = hari;
-	}
+  public void setHari(String hari) {
+    this.hari = hari;
+  }
 
-	public String getJam() {
-		return jam;
-	}
+  public void setRuangan(String ruangan) {
+    this.ruangan = ruangan;
+  }
 
-	public void setJam(String jam) {
-		this.jam = jam;
-	}
+  @Override
+  public String toString() {
+    StringBuilder builder = new StringBuilder();
+    builder.append("JadwalKuliah [ruangan=").append(ruangan).append(", hari=").append(hari)
+        .append(", toString()=").append(super.toString()).append("]");
+    return builder.toString();
+  }
 
 }

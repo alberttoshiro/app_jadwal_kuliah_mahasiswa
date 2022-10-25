@@ -1,30 +1,34 @@
 package com.albert.model;
 
-public class Matakuliah {
-	
-	private Integer matakuliahId;
-	private String namaMatakuliah;
+public class Matakuliah extends BaseTable {
 
-	public Matakuliah(Integer matakuliahId, String namaMatakuliah) {
-		super();
-		this.matakuliahId = matakuliahId;
-		this.namaMatakuliah = namaMatakuliah;
-	}
+  private static final long serialVersionUID = -8287718414081642062L;
 
-	public Integer getMatakuliahId() {
-		return matakuliahId;
-	}
+  private String namaMatakuliah;
 
-	public void setMatakuliahId(Integer matakuliahId) {
-		this.matakuliahId = matakuliahId;
-	}
+  public Matakuliah() {
+    super();
+  }
 
-	public String getNamaMatakuliah() {
-		return namaMatakuliah;
-	}
+  public Matakuliah(String id, String namaMatakuliah) {
+    super(id);
+    this.namaMatakuliah = namaMatakuliah;
+  }
 
-	public void setNamaMatakuliah(String namaMatakuliah) {
-		this.namaMatakuliah = namaMatakuliah;
-	}
+  public String getNamaMatakuliah() {
+    return namaMatakuliah;
+  }
+
+  public void setNamaMatakuliah(String namaMatakuliah) {
+    this.namaMatakuliah = namaMatakuliah;
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder builder = new StringBuilder();
+    builder.append("Matakuliah [namaMatakuliah=").append(namaMatakuliah).append(", toString()=")
+        .append(super.toString()).append("]");
+    return builder.toString();
+  }
 
 }

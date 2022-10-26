@@ -6,8 +6,10 @@ public class JadwalKuliahMahasiswa extends JadwalKuliah {
 
   private static final long serialVersionUID = -6358044350661276227L;
 
+  private String idJadwalKuliahMahasiswa;
   private String idMahasiswa;
   private String nim;
+  private String nama;
   private String idMatakuliah;
   private String namaMatakuliah;
 
@@ -15,13 +17,20 @@ public class JadwalKuliahMahasiswa extends JadwalKuliah {
     super();
   }
 
-  public JadwalKuliahMahasiswa(String id, LocalTime startTime, LocalTime endTime, String ruangan,
-      String hari, String idMahasiswa, String nim, String idMatakuliah, String namaMatakuliah) {
-    super(id, startTime, endTime, ruangan, hari);
+  public JadwalKuliahMahasiswa(String idJadwalKuliahMahasiswa, String idMahasiswa, String nim,
+      String nama, String idMatakuliah, String namaMatakuliah, String id, String hari,
+      String ruangan, LocalTime waktuMulai, LocalTime waktuSelesai) {
+    super(id, hari, ruangan, waktuMulai, waktuSelesai);
+    this.idJadwalKuliahMahasiswa = idJadwalKuliahMahasiswa;
     this.idMahasiswa = idMahasiswa;
     this.nim = nim;
+    this.nama = nama;
     this.idMatakuliah = idMatakuliah;
     this.namaMatakuliah = namaMatakuliah;
+  }
+
+  public String getIdJadwalKuliahMahasiswa() {
+    return idJadwalKuliahMahasiswa;
   }
 
   public String getIdMahasiswa() {
@@ -32,6 +41,10 @@ public class JadwalKuliahMahasiswa extends JadwalKuliah {
     return idMatakuliah;
   }
 
+  public String getNama() {
+    return nama;
+  }
+
   public String getNamaMatakuliah() {
     return namaMatakuliah;
   }
@@ -40,12 +53,20 @@ public class JadwalKuliahMahasiswa extends JadwalKuliah {
     return nim;
   }
 
+  public void setIdJadwalKuliahMahasiswa(String idJadwalKuliahMahasiswa) {
+    this.idJadwalKuliahMahasiswa = idJadwalKuliahMahasiswa;
+  }
+
   public void setIdMahasiswa(String idMahasiswa) {
     this.idMahasiswa = idMahasiswa;
   }
 
   public void setIdMatakuliah(String idMatakuliah) {
     this.idMatakuliah = idMatakuliah;
+  }
+
+  public void setNama(String nama) {
+    this.nama = nama;
   }
 
   public void setNamaMatakuliah(String namaMatakuliah) {
@@ -60,8 +81,8 @@ public class JadwalKuliahMahasiswa extends JadwalKuliah {
   public String toString() {
     StringBuilder builder = new StringBuilder();
     builder.append("JadwalKuliahMahasiswa [idMahasiswa=").append(idMahasiswa).append(", nim=")
-        .append(nim).append(", idMatakuliah=").append(idMatakuliah).append(", namaMatakuliah=")
-        .append(namaMatakuliah).append(", toString()=").append(super.toString()).append("]");
+        .append(nim).append(", nama=").append(nama).append(", idMatakuliah=").append(idMatakuliah)
+        .append(", namaMatakuliah=").append(namaMatakuliah).append("]");
     return builder.toString();
   }
 

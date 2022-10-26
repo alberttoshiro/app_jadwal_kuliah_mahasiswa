@@ -12,7 +12,6 @@ public class MatakuliahDAO extends JDBCPostgreSQLConnect<Matakuliah>
 
   private static final String SELECT_ALL = "SELECT * FROM matakuliah";
   private static final String SELECT_BY_ID = "SELECT * FROM mahasiswa WHERE id_matakuliah = ?";
-  private static final String SELECT_BY_NAMA = "SELECT * FROM matakuliah WHERE nama ILIKE ?";
   private static final String INSERT_MATAKULIAH =
       "INSERT INTO matakuliah(id_matakuliah, nama_matakuliah) VALUES (uuid_generate_v4(), ?)";
   private static final String DELETE_MATAKULIAH = "DELETE FROM matakuliah WHERE id_matakuliah = ?";
@@ -20,7 +19,7 @@ public class MatakuliahDAO extends JDBCPostgreSQLConnect<Matakuliah>
       "UPDATE matakuliah SET nama = ? WHERE id_matakuliah = ?";
 
   private static final String COLUMN_ID = "id_matakuliah";
-  private static final String COLUMN_NAMA = "nama_kuliah";
+  private static final String COLUMN_NAMA = "nama_matakuliah";
 
   private static final List<String> COLUMNS_NAMES = Arrays.asList(COLUMN_ID, COLUMN_NAMA);
 
@@ -28,12 +27,12 @@ public class MatakuliahDAO extends JDBCPostgreSQLConnect<Matakuliah>
     super(url, username, password);
   }
 
-  private void convertToListMatakuliah(List<Matakuliah> listMatakuliah,
-      List<Map<String, Object>> result) {
+  @Override
+  protected void convertToList(List<Matakuliah> list, List<Map<String, Object>> result) {
     for (Map<String, Object> map : result) {
       Matakuliah matakuliah =
           new Matakuliah(map.get(COLUMN_ID).toString(), map.get(COLUMN_NAMA).toString());
-      listMatakuliah.add(matakuliah);
+      list.add(matakuliah);
     }
   }
 
@@ -52,7 +51,7 @@ public class MatakuliahDAO extends JDBCPostgreSQLConnect<Matakuliah>
     List<Matakuliah> listMatakuliah = new ArrayList<>();
     List<Map<String, Object>> result = executeQuery(SELECT_BY_ID, parameters, COLUMNS_NAMES);
 
-    convertToListMatakuliah(listMatakuliah, result);
+    convertToList(listMatakuliah, result);
     if (!listMatakuliah.isEmpty()) {
       return listMatakuliah.get(0);
     }
@@ -63,7 +62,7 @@ public class MatakuliahDAO extends JDBCPostgreSQLConnect<Matakuliah>
   public List<Matakuliah> getAll() {
     List<Matakuliah> listMatakuliah = new ArrayList<>();
     List<Map<String, Object>> result = executeQuery(SELECT_ALL, emptyParameters, COLUMNS_NAMES);
-    convertToListMatakuliah(listMatakuliah, result);
+    convertToList(listMatakuliah, result);
     return listMatakuliah;
   }
 

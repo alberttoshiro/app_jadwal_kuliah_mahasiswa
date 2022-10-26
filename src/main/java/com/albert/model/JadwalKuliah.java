@@ -6,15 +6,15 @@ public class JadwalKuliah extends BaseScheduleTable {
 
   private static final long serialVersionUID = 7167094102699512026L;
 
-  private String ruangan;
   private String hari;
+  private String ruangan;
 
   public JadwalKuliah() {
     super();
   }
 
-  public JadwalKuliah(String id, LocalTime startTime, LocalTime endTime, String ruangan,
-      String hari) {
+  public JadwalKuliah(String id, String hari, String ruangan, LocalTime startTime,
+      LocalTime endTime) {
     super(id, startTime, endTime);
     this.ruangan = ruangan;
     this.hari = hari;

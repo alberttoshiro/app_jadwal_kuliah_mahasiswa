@@ -29,12 +29,12 @@ public class MahasiswaDAO extends JDBCPostgreSQLConnect<Mahasiswa> implements Ba
     super(url, username, password);
   }
 
-  private void convertToListMahasiswa(List<Mahasiswa> listMahasiswa,
-      List<Map<String, Object>> result) {
+  @Override
+  protected void convertToList(List<Mahasiswa> list, List<Map<String, Object>> result) {
     for (Map<String, Object> map : result) {
       Mahasiswa mahasiswa = new Mahasiswa(map.get(COLUMN_ID).toString(),
           map.get(COLUMN_NIM).toString(), map.get(COLUMN_NAMA).toString());
-      listMahasiswa.add(mahasiswa);
+      list.add(mahasiswa);
     }
   }
 
@@ -53,7 +53,7 @@ public class MahasiswaDAO extends JDBCPostgreSQLConnect<Mahasiswa> implements Ba
     List<Mahasiswa> listMahasiswa = new ArrayList<>();
     List<Map<String, Object>> result = executeQuery(SELECT_BY_ID, parameters, COLUMNS_NAMES);
 
-    convertToListMahasiswa(listMahasiswa, result);
+    convertToList(listMahasiswa, result);
     if (!listMahasiswa.isEmpty()) {
       return listMahasiswa.get(0);
     }
@@ -64,7 +64,7 @@ public class MahasiswaDAO extends JDBCPostgreSQLConnect<Mahasiswa> implements Ba
   public List<Mahasiswa> getAll() {
     List<Mahasiswa> listMahasiswa = new ArrayList<>();
     List<Map<String, Object>> result = executeQuery(SELECT_ALL, emptyParameters, COLUMNS_NAMES);
-    convertToListMahasiswa(listMahasiswa, result);
+    convertToList(listMahasiswa, result);
     return listMahasiswa;
   }
 
@@ -76,7 +76,7 @@ public class MahasiswaDAO extends JDBCPostgreSQLConnect<Mahasiswa> implements Ba
 
     List<Map<String, Object>> result = executeQuery(query, parameters, COLUMNS_NAMES);
 
-    convertToListMahasiswa(listMahasiswa, result);
+    convertToList(listMahasiswa, result);
     return listMahasiswa;
   }
 

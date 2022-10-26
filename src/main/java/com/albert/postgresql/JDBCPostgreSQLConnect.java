@@ -51,6 +51,8 @@ public abstract class JDBCPostgreSQLConnect<T extends BaseTable> {
     }
   }
 
+  protected abstract void convertToList(List<T> list, List<Map<String, Object>> result);
+
   public List<Map<String, Object>> executeQuery(String query, List<Map<String, String>> parameters,
       List<String> columnNames) {
     List<Map<String, Object>> result = new ArrayList<>();
@@ -99,12 +101,11 @@ public abstract class JDBCPostgreSQLConnect<T extends BaseTable> {
         } else if (entryValue.equals(STRING_DATA_TYPE)) {
           st.setString(i + 1, entryKey);
         } else if (entryValue.equals(TIME_DATA_TYPE)) {
-          st.setTime(i + 1, AppUtil.convertTime(entryKey));
+          st.setObject(i + 1, AppUtil.convertStringToLocalTime(entryKey));
         } else if (entryValue.equals(UUID_DATA_TYPE)) {
           st.setObject(i + 1, UUID.fromString(entryKey));
         }
       }
     }
   }
-
 }

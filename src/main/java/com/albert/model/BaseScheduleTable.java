@@ -1,47 +1,40 @@
 package com.albert.model;
 
-import java.io.Serializable;
 import java.time.LocalTime;
 
-public abstract class BaseScheduleTable extends BaseTable implements Serializable {
+public abstract class BaseScheduleTable extends BaseTable {
 
   private static final long serialVersionUID = -6390880593638813799L;
 
-  private LocalTime startTime;
-  private LocalTime endTime;
+  private LocalTime waktuMulai;
+  private LocalTime waktuSelesai;
 
   public BaseScheduleTable() {
     super();
   }
 
-  public BaseScheduleTable(String id, LocalTime startTime, LocalTime endTime) {
+  public BaseScheduleTable(String id, LocalTime waktuMulai, LocalTime waktuSelesai) {
     super(id);
-    this.startTime = startTime;
-    this.endTime = endTime;
+    this.waktuMulai = waktuMulai;
+    this.waktuSelesai = waktuSelesai;
   }
 
-  public LocalTime getEndTime() {
-    return endTime;
+  public LocalTime getWaktuMulai() {
+    return waktuMulai;
   }
 
-  public LocalTime getStartTime() {
-    return startTime;
+  public LocalTime getWaktuSelesai() {
+    return waktuSelesai;
   }
 
-  public void setEndTime(LocalTime endTime) {
-    this.endTime = endTime;
+  public void setWaktuMulai(LocalTime waktuMulai) {
+    this.waktuMulai = waktuMulai;
   }
 
-  public void setStartTime(LocalTime startTime) {
-    this.startTime = startTime;
+  public void setWaktuSelesai(LocalTime waktuSelesai) {
+    this.waktuSelesai = waktuSelesai;
   }
 
-  @Override
-  public String toString() {
-    StringBuilder builder = new StringBuilder();
-    builder.append("BaseScheduleTable [startTime=").append(startTime).append(", endTime=")
-        .append(endTime).append(", toString()=").append(super.toString()).append("]");
-    return builder.toString();
-  }
+
 
 }

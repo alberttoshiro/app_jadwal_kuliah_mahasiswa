@@ -68,7 +68,7 @@ public class MahasiswaDAO extends JDBCPostgreSQLConnect<Mahasiswa> implements Ba
     return listMahasiswa;
   }
 
-  public List<Mahasiswa> getMahasiswa(String searchParam, String query) {
+  private List<Mahasiswa> getMahasiswa(String searchParam, String query) {
     List<Mahasiswa> listMahasiswa = new ArrayList<>();
 
     List<Map<String, String>> parameters = new ArrayList<>();
@@ -80,7 +80,7 @@ public class MahasiswaDAO extends JDBCPostgreSQLConnect<Mahasiswa> implements Ba
     return listMahasiswa;
   }
 
-  public List<Mahasiswa> getMahasiswaByName(String name) {
+  public List<Mahasiswa> getMahasiswaByNama(String name) {
     return getMahasiswa(name, SELECT_BY_NAMA);
   }
 

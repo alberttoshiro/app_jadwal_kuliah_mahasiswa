@@ -18,6 +18,12 @@ public class FolderListener implements Runnable {
   private static final String USERNAME = "postgres";
   private static final String PASSWORD = "postgres";
 
+  private MahasiswaDAO mahasiswaDAO = new MahasiswaDAO(URL, USERNAME, PASSWORD);
+  private MatakuliahDAO matakuliahDAO = new MatakuliahDAO(URL, USERNAME, PASSWORD);
+  private JadwalKuliahDAO jadwalKuliahDAO = new JadwalKuliahDAO(URL, USERNAME, PASSWORD);
+  private JadwalKuliahMahasiswaDAO jadwalKuliahMahasiswaDAO =
+      new JadwalKuliahMahasiswaDAO(URL, USERNAME, PASSWORD);
+
   public void newProcessDataThread(Runnable runnableTask, List<Thread> threads) {
     Thread t = new Thread(runnableTask);
     t.start();
@@ -31,12 +37,6 @@ public class FolderListener implements Runnable {
     String root = "data/";
     String folderMaster = "master";
     File masterFolder = new File(root + folderMaster);
-
-    MahasiswaDAO mahasiswaDAO = new MahasiswaDAO(URL, USERNAME, PASSWORD);
-    MatakuliahDAO matakuliahDAO = new MatakuliahDAO(URL, USERNAME, PASSWORD);
-    JadwalKuliahDAO jadwalKuliahDAO = new JadwalKuliahDAO(URL, USERNAME, PASSWORD);
-    JadwalKuliahMahasiswaDAO jadwalKuliahMahasiswaDAO =
-        new JadwalKuliahMahasiswaDAO(URL, USERNAME, PASSWORD);
 
     while (true) {
       List<Thread> threads = new ArrayList<>();

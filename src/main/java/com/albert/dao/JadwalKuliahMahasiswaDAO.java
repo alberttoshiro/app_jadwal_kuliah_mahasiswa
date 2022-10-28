@@ -19,11 +19,11 @@ public class JadwalKuliahMahasiswaDAO extends JDBCPostgreSQLConnect<JadwalKuliah
       "SELECT jadwal_kuliah_mahasiswa.id_jadwal_kuliah_mahasiswa, "
           + "mahasiswa.id_mahasiswa, mahasiswa.nim, mahasiswa.nama, "
           + "matakuliah.id_matakuliah, matakuliah.nama_matakuliah, "
-          + "jadwal_kuliah.id_jadwal_kuliah, jadwal_kuliah.hari, jadwal_kuliah.ruangan, jadwal_kuliah.waktu_mulai, jadwal_kuliah.waktu_selesai "
+          + "jadwal_kuliah.id_jadwal_kuliah, jadwal_kuliah.hari, jadwal_kuliah.ruangan, to_char(jadwal_kuliah.waktu_mulai, 'HH24:MI') as waktu_mulai, to_char(jadwal_kuliah.waktu_selesai, 'HH24:MI') as waktu_selesai "
           + "FROM jadwal_kuliah_mahasiswa "
-          + "JOIN mahasiswa ON mahasiswa.nim = jadwal_kuliah_mahasiswa.nim "
-          + "JOIN jadwal_kuliah ON jadwal_kuliah.jadwal_kuliah_id = jadwal_kuliah_mahasiswa.jadwal_kuliah_id "
-          + "JOIN matakuliah ON matakuliah.matakuliah_id = jadwal_kuliah_mahasiswa.matakuliah_id "
+          + "JOIN mahasiswa ON mahasiswa.id_mahasiswa = jadwal_kuliah_mahasiswa.id_mahasiswa "
+          + "JOIN jadwal_kuliah ON jadwal_kuliah.id_jadwal_kuliah = jadwal_kuliah_mahasiswa.id_jadwal_kuliah "
+          + "JOIN matakuliah ON matakuliah.id_matakuliah = jadwal_kuliah_mahasiswa.id_matakuliah "
           + "WHERE jadwal_kuliah_mahasiswa.id_mahasiswa = ? ";
   private static final String INSERT_JADWAL_KULIAH_MAHASISWA =
       "INSERT INTO jadwal_kuliah_mahasiswa(id_jadwal_kuliah_mahasiswa, id_mahasiswa, id_matakuliah, id_jadwal_kuliah) VALUES (uuid_generate_v4(), ?, ?, ?)";

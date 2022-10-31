@@ -28,12 +28,14 @@ public class MatakuliahDAO extends JDBCPostgreSQLConnect<Matakuliah>
   }
 
   @Override
-  protected void convertToList(List<Matakuliah> list, List<Map<String, Object>> result) {
+  protected List<Matakuliah> convertToList(List<Map<String, Object>> result) {
+    List<Matakuliah> list = new ArrayList<>();
     for (Map<String, Object> map : result) {
       Matakuliah matakuliah =
           new Matakuliah(map.get(COLUMN_ID).toString(), map.get(COLUMN_NAMA).toString());
       list.add(matakuliah);
     }
+    return list;
   }
 
   @Override
@@ -48,11 +50,10 @@ public class MatakuliahDAO extends JDBCPostgreSQLConnect<Matakuliah>
     List<Map<String, String>> parameters = new ArrayList<>();
     populateParameters(parameters, id, UUID_DATA_TYPE);
 
-    List<Matakuliah> listMatakuliah = new ArrayList<>();
     List<Map<String, Object>> result = executeQuery(SELECT_BY_ID, parameters, COLUMNS_NAMES);
+    List<Matakuliah> listMatakuliah = convertToList(result);
 
-    convertToList(listMatakuliah, result);
-    if (!listMatakuliah.isEmpty()) {
+    if (validateFindById(listMatakuliah)) {
       return listMatakuliah.get(0);
     }
     return null;
@@ -60,9 +61,8 @@ public class MatakuliahDAO extends JDBCPostgreSQLConnect<Matakuliah>
 
   @Override
   public List<Matakuliah> getAll() {
-    List<Matakuliah> listMatakuliah = new ArrayList<>();
     List<Map<String, Object>> result = executeQuery(SELECT_ALL, emptyParameters, COLUMNS_NAMES);
-    convertToList(listMatakuliah, result);
+    List<Matakuliah> listMatakuliah = convertToList(result);
     return listMatakuliah;
   }
 

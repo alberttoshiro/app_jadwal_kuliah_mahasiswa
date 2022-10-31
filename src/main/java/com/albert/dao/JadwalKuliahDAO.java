@@ -35,7 +35,8 @@ public class JadwalKuliahDAO extends JDBCPostgreSQLConnect<JadwalKuliah>
   }
 
   @Override
-  protected void convertToList(List<JadwalKuliah> list, List<Map<String, Object>> result) {
+  protected List<JadwalKuliah> convertToList(List<Map<String, Object>> result) {
+    List<JadwalKuliah> list = new ArrayList<>();
     for (Map<String, Object> map : result) {
       JadwalKuliah jadwalKuliah = new JadwalKuliah(map.get(COLUMN_ID).toString(),
           map.get(COLUMN_HARI).toString(), map.get(COLUMN_RUANGAN).toString(),
@@ -43,6 +44,7 @@ public class JadwalKuliahDAO extends JDBCPostgreSQLConnect<JadwalKuliah>
           AppUtil.convertStringToLocalTime(map.get(COLUMN_WAKTU_SELESAI).toString()));
       list.add(jadwalKuliah);
     }
+    return list;
   }
 
   @Override
@@ -57,11 +59,9 @@ public class JadwalKuliahDAO extends JDBCPostgreSQLConnect<JadwalKuliah>
     List<Map<String, String>> parameters = new ArrayList<>();
     populateParameters(parameters, id, UUID_DATA_TYPE);
 
-    List<JadwalKuliah> listJadwalKuliah = new ArrayList<>();
     List<Map<String, Object>> result = executeQuery(SELECT_BY_ID, parameters, COLUMNS_NAMES);
-
-    convertToList(listJadwalKuliah, result);
-    if (!listJadwalKuliah.isEmpty()) {
+    List<JadwalKuliah> listJadwalKuliah = convertToList(result);
+    if (validateFindById(listJadwalKuliah)) {
       return listJadwalKuliah.get(0);
     }
     return null;
@@ -69,9 +69,8 @@ public class JadwalKuliahDAO extends JDBCPostgreSQLConnect<JadwalKuliah>
 
   @Override
   public List<JadwalKuliah> getAll() {
-    List<JadwalKuliah> listJadwalKuliah = new ArrayList<>();
     List<Map<String, Object>> result = executeQuery(SELECT_ALL, emptyParameters, COLUMNS_NAMES);
-    convertToList(listJadwalKuliah, result);
+    List<JadwalKuliah> listJadwalKuliah = convertToList(result);
     return listJadwalKuliah;
   }
 

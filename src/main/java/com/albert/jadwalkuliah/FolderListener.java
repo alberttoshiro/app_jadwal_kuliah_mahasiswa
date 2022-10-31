@@ -14,15 +14,30 @@ import com.albert.processdata.ProcessDataMatakuliah;
 
 public class FolderListener implements Runnable {
 
-  private static final String URL = "jdbc:postgresql://localhost/jadwal_mahasiswa";
-  private static final String USERNAME = "postgres";
-  private static final String PASSWORD = "postgres";
+  private String url;
+  private String username;
+  private String password;
 
-  private MahasiswaDAO mahasiswaDAO = new MahasiswaDAO(URL, USERNAME, PASSWORD);
-  private MatakuliahDAO matakuliahDAO = new MatakuliahDAO(URL, USERNAME, PASSWORD);
-  private JadwalKuliahDAO jadwalKuliahDAO = new JadwalKuliahDAO(URL, USERNAME, PASSWORD);
-  private JadwalKuliahMahasiswaDAO jadwalKuliahMahasiswaDAO =
-      new JadwalKuliahMahasiswaDAO(URL, USERNAME, PASSWORD);
+  private MahasiswaDAO mahasiswaDAO;
+  private MatakuliahDAO matakuliahDAO;
+  private JadwalKuliahDAO jadwalKuliahDAO;
+  private JadwalKuliahMahasiswaDAO jadwalKuliahMahasiswaDAO;
+
+
+  public FolderListener(String url, String username, String password) {
+    super();
+    this.url = url;
+    this.username = username;
+    this.password = password;
+    initDAO();
+  }
+
+  public void initDAO() {
+    mahasiswaDAO = new MahasiswaDAO(url, username, password);
+    matakuliahDAO = new MatakuliahDAO(url, username, password);
+    jadwalKuliahDAO = new JadwalKuliahDAO(url, username, password);
+    jadwalKuliahMahasiswaDAO = new JadwalKuliahMahasiswaDAO(url, username, password);
+  }
 
   public void newProcessDataThread(Runnable runnableTask, List<Thread> threads) {
     Thread t = new Thread(runnableTask);

@@ -30,12 +30,14 @@ public class MahasiswaDAO extends JDBCPostgreSQLConnect<Mahasiswa> implements Ba
   }
 
   @Override
-  protected void convertToList(List<Mahasiswa> list, List<Map<String, Object>> result) {
+  protected List<Mahasiswa> convertToList(List<Map<String, Object>> result) {
+    List<Mahasiswa> list = new ArrayList<>();
     for (Map<String, Object> map : result) {
       Mahasiswa mahasiswa = new Mahasiswa(map.get(COLUMN_ID).toString(),
           map.get(COLUMN_NIM).toString(), map.get(COLUMN_NAMA).toString());
       list.add(mahasiswa);
     }
+    return list;
   }
 
   @Override
@@ -50,11 +52,10 @@ public class MahasiswaDAO extends JDBCPostgreSQLConnect<Mahasiswa> implements Ba
     List<Map<String, String>> parameters = new ArrayList<>();
     populateParameters(parameters, id, UUID_DATA_TYPE);
 
-    List<Mahasiswa> listMahasiswa = new ArrayList<>();
     List<Map<String, Object>> result = executeQuery(SELECT_BY_ID, parameters, COLUMNS_NAMES);
+    List<Mahasiswa> listMahasiswa = convertToList(result);
 
-    convertToList(listMahasiswa, result);
-    if (!listMahasiswa.isEmpty()) {
+    if (validateFindById(listMahasiswa)) {
       return listMahasiswa.get(0);
     }
     return null;
@@ -62,21 +63,18 @@ public class MahasiswaDAO extends JDBCPostgreSQLConnect<Mahasiswa> implements Ba
 
   @Override
   public List<Mahasiswa> getAll() {
-    List<Mahasiswa> listMahasiswa = new ArrayList<>();
     List<Map<String, Object>> result = executeQuery(SELECT_ALL, emptyParameters, COLUMNS_NAMES);
-    convertToList(listMahasiswa, result);
+    List<Mahasiswa> listMahasiswa = convertToList(result);
     return listMahasiswa;
   }
 
   private List<Mahasiswa> getMahasiswa(String searchParam, String query) {
-    List<Mahasiswa> listMahasiswa = new ArrayList<>();
-
     List<Map<String, String>> parameters = new ArrayList<>();
     populateParameters(parameters, "%" + searchParam + "%", STRING_DATA_TYPE);
 
     List<Map<String, Object>> result = executeQuery(query, parameters, COLUMNS_NAMES);
 
-    convertToList(listMahasiswa, result);
+    List<Mahasiswa> listMahasiswa = convertToList(result);
     return listMahasiswa;
   }
 

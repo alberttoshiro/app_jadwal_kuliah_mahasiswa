@@ -29,8 +29,11 @@ public abstract class JDBCPostgreSQLConnect<T extends BaseTable> {
 
   protected static final List<Map<String, String>> emptyParameters = new ArrayList<>();
 
+  @SuppressWarnings("unused")
   private final String url;
+  @SuppressWarnings("unused")
   private final String username;
+  @SuppressWarnings("unused")
   private final String password;
 
   private Connection connection;
@@ -51,7 +54,7 @@ public abstract class JDBCPostgreSQLConnect<T extends BaseTable> {
     }
   }
 
-  protected abstract void convertToList(List<T> list, List<Map<String, Object>> result);
+  protected abstract List<T> convertToList(List<Map<String, Object>> result);
 
   public List<Map<String, Object>> executeQuery(String query, List<Map<String, String>> parameters,
       List<String> columnNames) {
@@ -107,5 +110,15 @@ public abstract class JDBCPostgreSQLConnect<T extends BaseTable> {
         }
       }
     }
+  }
+
+  protected boolean validateFindById(List<T> list) {
+    if (list.size() == 0) {
+      System.out.println("No object found with such id");
+      return false;
+    } else if (list.size() > 1) {
+      throw new RuntimeException("The object found is more than one.");
+    }
+    return true;
   }
 }

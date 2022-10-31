@@ -58,7 +58,8 @@ public class JadwalKuliahMahasiswaDAO extends JDBCPostgreSQLConnect<JadwalKuliah
   }
 
   @Override
-  protected void convertToList(List<JadwalKuliahMahasiswa> list, List<Map<String, Object>> result) {
+  protected List<JadwalKuliahMahasiswa> convertToList(List<Map<String, Object>> result) {
+    List<JadwalKuliahMahasiswa> list = new ArrayList<>();
     for (Map<String, Object> map : result) {
       JadwalKuliahMahasiswa jadwalKuliahMahasiswa = new JadwalKuliahMahasiswa(
           map.get(COLUMN_ID).toString(), map.get(COLUMN_ID_MAHASISWA).toString(),
@@ -70,6 +71,7 @@ public class JadwalKuliahMahasiswaDAO extends JDBCPostgreSQLConnect<JadwalKuliah
           AppUtil.convertStringToLocalTime(map.get(COLUMN_WAKTU_SELESAI).toString()));
       list.add(jadwalKuliahMahasiswa);
     }
+    return list;
   }
 
   @Override
@@ -84,11 +86,10 @@ public class JadwalKuliahMahasiswaDAO extends JDBCPostgreSQLConnect<JadwalKuliah
     List<Map<String, String>> parameters = new ArrayList<>();
     populateParameters(parameters, id, UUID_DATA_TYPE);
 
-    List<JadwalKuliahMahasiswa> listJadwalKuliahMahasiswa = new ArrayList<>();
     List<Map<String, Object>> result = executeQuery(SELECT_BY_ID, parameters, COLUMNS_NAMES);
+    List<JadwalKuliahMahasiswa> listJadwalKuliahMahasiswa = convertToList(result);
 
-    convertToList(listJadwalKuliahMahasiswa, result);
-    if (!listJadwalKuliahMahasiswa.isEmpty()) {
+    if (validateFindById(listJadwalKuliahMahasiswa)) {
       return listJadwalKuliahMahasiswa.get(0);
     }
     return null;
@@ -96,22 +97,19 @@ public class JadwalKuliahMahasiswaDAO extends JDBCPostgreSQLConnect<JadwalKuliah
 
   @Override
   public List<JadwalKuliahMahasiswa> getAll() {
-    List<JadwalKuliahMahasiswa> listJadwalKuliahMahasiswa = new ArrayList<>();
     List<Map<String, Object>> result = executeQuery(SELECT_ALL, emptyParameters, COLUMNS_NAMES);
-    convertToList(listJadwalKuliahMahasiswa, result);
+    List<JadwalKuliahMahasiswa> listJadwalKuliahMahasiswa = convertToList(result);
     return listJadwalKuliahMahasiswa;
   }
 
   public List<JadwalKuliahMahasiswa> getJadwalKuliahMahasiswaByMahasiswa(Mahasiswa mahasiswa) {
-    List<JadwalKuliahMahasiswa> listJadwalKuliahMahasiswa = new ArrayList<>();
-
     List<Map<String, String>> parameters = new ArrayList<>();
     populateParameters(parameters, mahasiswa.getId(), UUID_DATA_TYPE);
 
     List<Map<String, Object>> result =
         executeQuery(SELECT_BY_ID_MAHASISWA, parameters, COLUMNS_NAMES);
 
-    convertToList(listJadwalKuliahMahasiswa, result);
+    List<JadwalKuliahMahasiswa> listJadwalKuliahMahasiswa = convertToList(result);
     return listJadwalKuliahMahasiswa;
   }
 

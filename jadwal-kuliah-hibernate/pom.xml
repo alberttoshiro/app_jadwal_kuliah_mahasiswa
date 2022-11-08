@@ -46,6 +46,16 @@
       <artifactId>rest-assured</artifactId>
       <scope>test</scope>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/io.quarkus/quarkus-hibernate-orm -->
+		<dependency>
+		    <groupId>io.quarkus</groupId>
+		    <artifactId>quarkus-hibernate-orm</artifactId>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/io.quarkus/quarkus-jdbc-postgresql -->
+		<dependency>
+		    <groupId>io.quarkus</groupId>
+		    <artifactId>quarkus-jdbc-postgresql</artifactId>
+		</dependency>
   </dependencies>
   <build>
     <plugins>

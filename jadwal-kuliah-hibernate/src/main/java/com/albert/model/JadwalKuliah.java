@@ -5,8 +5,14 @@ import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
+@Getter
+@Setter
+@ToString(callSuper = true)
 @Table(name = "jadwal_kuliah")
 public class JadwalKuliah extends BaseEntity {
 
@@ -33,45 +39,5 @@ public class JadwalKuliah extends BaseEntity {
     this.ruangan = ruangan;
     this.waktuMulai = waktuMulai;
     this.waktuSelesai = waktuSelesai;
-  }
-
-  public String getHari() {
-    return hari;
-  }
-
-  public String getRuangan() {
-    return ruangan;
-  }
-
-  public LocalTime getWaktuMulai() {
-    return waktuMulai;
-  }
-
-  public LocalTime getWaktuSelesai() {
-    return waktuSelesai;
-  }
-
-  public void setHari(String hari) {
-    this.hari = hari;
-  }
-
-  public void setRuangan(String ruangan) {
-    this.ruangan = ruangan;
-  }
-
-  public void setWaktuMulai(LocalTime waktuMulai) {
-    this.waktuMulai = waktuMulai;
-  }
-
-  public void setWaktuSelesai(LocalTime waktuSelesai) {
-    this.waktuSelesai = waktuSelesai;
-  }
-
-  @Override
-  public String toString() {
-    StringBuilder builder = new StringBuilder();
-    builder.append("JadwalKuliah [hari=").append(hari).append(", ruangan=").append(ruangan)
-        .append("]");
-    return builder.toString();
   }
 }

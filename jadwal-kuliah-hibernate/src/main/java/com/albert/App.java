@@ -67,26 +67,26 @@ public class App {
     Transaction t = session.beginTransaction();
 
     Mahasiswa mahasiswa = new Mahasiswa();
-    mahasiswa.setNim("2201779623");
     mahasiswa.setNama("Albert Toshiro Heru");
-    session.persist(mahasiswa);
+    mahasiswa.setNim("2201779623");
+    // session.persist(mahasiswa);
 
     Matakuliah matakuliah = new Matakuliah();
     matakuliah.setNamaMatakuliah("Algorithm Design and Analysis");
-    session.persist(matakuliah);
+    // session.persist(matakuliah);
 
     JadwalKuliah jadwalKuliah = new JadwalKuliah();
     jadwalKuliah.setHari("Senin");
     jadwalKuliah.setRuangan("R505");
     jadwalKuliah.setWaktuMulai(AppUtil.convertStringToLocalTime("17:00"));
     jadwalKuliah.setWaktuSelesai(AppUtil.convertStringToLocalTime("19:00"));
-    session.persist(jadwalKuliah);
+    // session.persist(jadwalKuliah);
 
     JadwalKuliahMahasiswa jadwalKuliahMahasiswa = new JadwalKuliahMahasiswa();
     jadwalKuliahMahasiswa.setMahasiswa(mahasiswa);
     jadwalKuliahMahasiswa.setMatakuliah(matakuliah);
     jadwalKuliahMahasiswa.setJadwalKuliah(jadwalKuliah);
-    session.persist(jadwalKuliahMahasiswa);
+    // session.persist(jadwalKuliahMahasiswa);
 
     t.commit();
 

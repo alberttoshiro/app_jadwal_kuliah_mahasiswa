@@ -3,8 +3,14 @@ package com.albert.model;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
+@Getter
+@Setter
+@ToString(callSuper = true)
 public class Mahasiswa extends BaseEntity {
 
   @Column(name = "nim", unique = true)
@@ -21,21 +27,5 @@ public class Mahasiswa extends BaseEntity {
     super(id);
     this.nim = nim;
     this.nama = nama;
-  }
-
-  public String getNama() {
-    return nama;
-  }
-
-  public String getNim() {
-    return nim;
-  }
-
-  public void setNama(String nama) {
-    this.nama = nama;
-  }
-
-  public void setNim(String nim) {
-    this.nim = nim;
   }
 }

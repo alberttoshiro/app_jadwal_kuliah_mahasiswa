@@ -6,8 +6,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
+@Getter
+@Setter
+@ToString(callSuper = true)
 @Table(name = "jadwal_kuliah_mahasiswa", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"mahasiswa_id", "matakuliah_id", "jadwal_kuliah_id"})})
 public class JadwalKuliahMahasiswa extends BaseEntity {
@@ -34,29 +40,5 @@ public class JadwalKuliahMahasiswa extends BaseEntity {
     this.mahasiswa = mahasiswa;
     this.matakuliah = matakuliah;
     this.jadwalKuliah = jadwalKuliah;
-  }
-
-  public JadwalKuliah getJadwalKuliah() {
-    return jadwalKuliah;
-  }
-
-  public Mahasiswa getMahasiswa() {
-    return mahasiswa;
-  }
-
-  public Matakuliah getMatakuliah() {
-    return matakuliah;
-  }
-
-  public void setJadwalKuliah(JadwalKuliah jadwalKuliah) {
-    this.jadwalKuliah = jadwalKuliah;
-  }
-
-  public void setMahasiswa(Mahasiswa mahasiswa) {
-    this.mahasiswa = mahasiswa;
-  }
-
-  public void setMatakuliah(Matakuliah matakuliah) {
-    this.matakuliah = matakuliah;
   }
 }

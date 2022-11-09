@@ -5,8 +5,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import org.hibernate.annotations.GenericGenerator;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 @MappedSuperclass
+@Getter
+@Setter
+@ToString
 public abstract class BaseEntity {
   @Id
   @GeneratedValue(generator = "UUID")
@@ -20,20 +26,5 @@ public abstract class BaseEntity {
   public BaseEntity(UUID id) {
     super();
     this.id = id;
-  }
-
-  public UUID getId() {
-    return id;
-  }
-
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-  @Override
-  public String toString() {
-    StringBuilder builder = new StringBuilder();
-    builder.append("BaseTable [id=").append(id).append("]");
-    return builder.toString();
   }
 }

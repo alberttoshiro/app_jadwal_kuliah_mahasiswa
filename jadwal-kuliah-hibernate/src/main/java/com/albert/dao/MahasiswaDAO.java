@@ -3,6 +3,7 @@ package com.albert.dao;
 import java.util.List;
 import com.albert.database.PostgresDatabase;
 import com.albert.model.Mahasiswa;
+import org.hibernate.Session;
 import org.hibernate.query.Query;
 
 public class MahasiswaDAO extends BaseDAO<Mahasiswa> {
@@ -14,15 +15,21 @@ public class MahasiswaDAO extends BaseDAO<Mahasiswa> {
 
   public List<Mahasiswa> findByNama(String nama) {
     String stringQuery = "from Mahasiswa where nama like :nama";
-    Query<Mahasiswa> query = createQuery(stringQuery);
+    Session session = postgresDatabase.getSession();
+    Query<Mahasiswa> query = createQuery(stringQuery, session);
     query.setParameter("nama", "%" + nama + "%");
-    return query.list();
+    List<Mahasiswa> list = query.list();
+    session.close();
+    return list;
   }
 
   public List<Mahasiswa> findByNim(String nim) {
     String stringQuery = "from Mahasiswa where nim like :nim";
-    Query<Mahasiswa> query = createQuery(stringQuery);
+    Session session = postgresDatabase.getSession();
+    Query<Mahasiswa> query = createQuery(stringQuery, session);
     query.setParameter("nim", "%" + nim + "%");
-    return query.list();
+    List<Mahasiswa> list = query.list();
+    session.close();
+    return list;
   }
 }

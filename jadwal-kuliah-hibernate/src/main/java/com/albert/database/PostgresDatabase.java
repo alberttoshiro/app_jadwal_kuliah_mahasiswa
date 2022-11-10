@@ -32,12 +32,9 @@ public class PostgresDatabase {
   public final Session getSession() {
     Session session = null;
     try {
-      session = this.sessionFactory.getCurrentSession();
+      session = this.sessionFactory.openSession();
     } catch (Exception e) {
       e.printStackTrace();
-    }
-    if (session == null) {
-      session = this.sessionFactory.openSession();
     }
     return session;
   }

@@ -1,10 +1,8 @@
 package com.albert.model;
 
 import java.util.UUID;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import org.hibernate.annotations.GenericGenerator;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -15,8 +13,8 @@ import lombok.ToString;
 @ToString
 public abstract class BaseEntity {
   @Id
-  @GeneratedValue(generator = "UUID")
-  @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+  // @GeneratedValue(generator = "UUID")
+  // @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
   private UUID id;
 
   public BaseEntity() {

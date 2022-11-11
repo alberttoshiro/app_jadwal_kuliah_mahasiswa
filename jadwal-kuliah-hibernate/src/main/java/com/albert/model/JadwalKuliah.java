@@ -5,6 +5,7 @@ import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import com.albert.util.HariUtil;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -14,7 +15,7 @@ import lombok.ToString;
 @Setter
 @ToString(callSuper = true)
 @Table(name = "jadwal_kuliah")
-public class JadwalKuliah extends BaseEntity {
+public class JadwalKuliah extends BaseEntity implements Comparable<JadwalKuliah> {
 
   @Column(name = "hari")
   private String hari;
@@ -39,5 +40,14 @@ public class JadwalKuliah extends BaseEntity {
     this.ruangan = ruangan;
     this.waktuMulai = waktuMulai;
     this.waktuSelesai = waktuSelesai;
+  }
+
+  @Override
+  public int compareTo(JadwalKuliah o) {
+    int hari = HariUtil.getOrder(this.hari).compareTo(HariUtil.getOrder(o.hari));
+    if (hari != 0) {
+      return hari;
+    }
+    return this.waktuMulai.compareTo(o.waktuMulai);
   }
 }

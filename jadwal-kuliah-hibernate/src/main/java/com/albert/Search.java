@@ -3,15 +3,12 @@ package com.albert;
 import java.util.List;
 import com.albert.dao.JadwalKuliahMahasiswaDAO;
 import com.albert.dao.MahasiswaDAO;
-import com.albert.database.PostgresDatabase;
 import com.albert.model.JadwalKuliahMahasiswa;
 import com.albert.model.Mahasiswa;
 
 public class Search {
-  private static PostgresDatabase postgresDatabase = new PostgresDatabase();
-  private static MahasiswaDAO mahasiswaDAO = new MahasiswaDAO(postgresDatabase);
-  private static JadwalKuliahMahasiswaDAO jadwalKuliahMahasiswaDAO =
-      new JadwalKuliahMahasiswaDAO(postgresDatabase);
+  private static MahasiswaDAO mahasiswaDAO = new MahasiswaDAO();
+  private static JadwalKuliahMahasiswaDAO jadwalKuliahMahasiswaDAO = new JadwalKuliahMahasiswaDAO();
 
   public static List<Mahasiswa> getMahasiswa(String searchBy) {
     if (searchBy.startsWith("nama:")) {

@@ -1,5 +1,6 @@
 package com.albert.dao;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import com.albert.database.PostgresDatabase;
@@ -16,21 +17,21 @@ public class JadwalKuliahMahasiswaDAO extends BaseDAO<JadwalKuliahMahasiswa> {
   private MatakuliahDAO matakuliahDAO;
   private JadwalKuliahDAO jadwalKuliahDAO;
 
-  public JadwalKuliahMahasiswaDAO(PostgresDatabase postgresDatabase) {
-    super(postgresDatabase);
+  public JadwalKuliahMahasiswaDAO() {
+    super();
     this.setEntityClass(JadwalKuliahMahasiswa.class);
   }
 
   public JadwalKuliahMahasiswa convertToJadwalKuliahMahasiswa(UUID mahasiswaId, UUID matakuliahId,
       UUID jadwalKuliahId) {
     if (mahasiswaDAO == null) {
-      mahasiswaDAO = new MahasiswaDAO(postgresDatabase);
+      mahasiswaDAO = new MahasiswaDAO();
     }
     if (matakuliahDAO == null) {
-      matakuliahDAO = new MatakuliahDAO(postgresDatabase);
+      matakuliahDAO = new MatakuliahDAO();
     }
     if (jadwalKuliahDAO == null) {
-      jadwalKuliahDAO = new JadwalKuliahDAO(postgresDatabase);
+      jadwalKuliahDAO = new JadwalKuliahDAO();
     }
     Mahasiswa mahasiswa = mahasiswaDAO.findById(mahasiswaId);
     Matakuliah matakuliah = matakuliahDAO.findById(matakuliahId);
@@ -43,12 +44,13 @@ public class JadwalKuliahMahasiswaDAO extends BaseDAO<JadwalKuliahMahasiswa> {
   }
 
   public List<JadwalKuliahMahasiswa> findByMahasiswa(Mahasiswa mahasiswa) {
-    Session session = postgresDatabase.getSession();
+    Session session = PostgresDatabase.getSession();
     String stringQuery = "from JadwalKuliahMahasiswa where mahasiswa_id = :mahasiswaId";
     Query<JadwalKuliahMahasiswa> query = createQuery(stringQuery, session);
     query.setParameter("mahasiswaId", mahasiswa.getId());
     List<JadwalKuliahMahasiswa> list = query.list();
     session.close();
+    Collections.sort(list);
     return list;
   }
 }

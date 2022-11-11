@@ -1,13 +1,11 @@
 package com.albert;
 
-import com.albert.database.PostgresDatabase;
 import com.albert.processdata.FolderListener;
 
 public class App {
 
   public static void main(String[] args) {
-    PostgresDatabase postgresDatabase = new PostgresDatabase();
-    FolderListener folderListener = new FolderListener(postgresDatabase);
+    FolderListener folderListener = new FolderListener();
     Thread thread = new Thread(folderListener);
     thread.start();
   }
@@ -40,43 +38,6 @@ public class App {
   // // em.close();
   // // emf.close();
   // // }
-  // }
-
-  // public void testAdd() {
-  // StandardServiceRegistry ssr =
-  // new StandardServiceRegistryBuilder().configure("hibernate.cfg.xml").build();
-  // Metadata meta = new MetadataSources(ssr).getMetadataBuilder().build();
-  //
-  // SessionFactory factory = meta.getSessionFactoryBuilder().build();
-  // Session session = factory.openSession();
-  // Transaction t = session.beginTransaction();
-  //
-  // Mahasiswa mahasiswa = new Mahasiswa();
-  // mahasiswa.setNama("Albert Toshiro Heru");
-  // mahasiswa.setNim("2201779623");
-  // // session.persist(mahasiswa);
-  //
-  // Matakuliah matakuliah = new Matakuliah();
-  // matakuliah.setNamaMatakuliah("Algorithm Design and Analysis");
-  // // session.persist(matakuliah);
-  //
-  // JadwalKuliah jadwalKuliah = new JadwalKuliah();
-  // jadwalKuliah.setHari("Senin");
-  // jadwalKuliah.setRuangan("R505");
-  // jadwalKuliah.setWaktuMulai(AppUtil.convertStringToLocalTime("17:00"));
-  // jadwalKuliah.setWaktuSelesai(AppUtil.convertStringToLocalTime("19:00"));
-  // // session.persist(jadwalKuliah);
-  //
-  // JadwalKuliahMahasiswa jadwalKuliahMahasiswa = new JadwalKuliahMahasiswa();
-  // jadwalKuliahMahasiswa.setMahasiswa(mahasiswa);
-  // jadwalKuliahMahasiswa.setMatakuliah(matakuliah);
-  // jadwalKuliahMahasiswa.setJadwalKuliah(jadwalKuliah);
-  // // session.persist(jadwalKuliahMahasiswa);
-  //
-  // t.commit();
-  //
-  // session.close();
-  // factory.close();
   // }
 
 }

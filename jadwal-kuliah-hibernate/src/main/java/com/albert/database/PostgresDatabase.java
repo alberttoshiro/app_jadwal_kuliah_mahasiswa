@@ -8,42 +8,46 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 
-@Getter
-@Setter
-@ToString
 public class PostgresDatabase {
 
-  private StandardServiceRegistry standardServiceRegistry;
-  private Metadata metadata;
-  private SessionFactory sessionFactory;
+  private static SessionFactory sessionFactory;
 
-  public PostgresDatabase() {
-    super();
-    standardServiceRegistry =
+  private static void buildSessionFactory() {
+    StandardServiceRegistry standardServiceRegistry =
         new StandardServiceRegistryBuilder().configure("hibernate.cfg.xml").build();
-    metadata = new MetadataSources(standardServiceRegistry).getMetadataBuilder().build();
+    Metadata metadata = new MetadataSources(standardServiceRegistry).getMetadataBuilder().build();
     sessionFactory = metadata.getSessionFactoryBuilder().build();
   }
 
-  public final Session getSession() {
+  public static final Session getSession() {
+    if (sessionFactory == null) {
+      buildSessionFactory();
+    }
     Session session = null;
     try {
-      session = this.sessionFactory.openSession();
+      session = sessionFactory.openSession();
     } catch (Exception e) {
       e.printStackTrace();
     }
     return session;
   }
 
-  public final Transaction getTransaction(Session session) {
+  public static final Transaction getTransaction(Session session) {
     Transaction transaction = session.getTransaction();
     if (!TransactionStatus.ACTIVE.equals(transaction.getStatus())) {
       transaction = session.beginTransaction();
     }
     return transaction;
+  }
+
+  public PostgresDatabase() {
+    super();
+    if (sessionFactory == null) {
+      StandardServiceRegistry standardServiceRegistry =
+          new StandardServiceRegistryBuilder().configure("hibernate.cfg.xml").build();
+      Metadata metadata = new MetadataSources(standardServiceRegistry).getMetadataBuilder().build();
+      sessionFactory = metadata.getSessionFactoryBuilder().build();
+    }
   }
 }

@@ -16,7 +16,7 @@ import lombok.ToString;
 @ToString(callSuper = true)
 @Table(name = "jadwal_kuliah_mahasiswa", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"mahasiswa_id", "matakuliah_id", "jadwal_kuliah_id"})})
-public class JadwalKuliahMahasiswa extends BaseEntity {
+public class JadwalKuliahMahasiswa extends BaseEntity implements Comparable<JadwalKuliahMahasiswa> {
 
   @ManyToOne
   @JoinColumn(name = "mahasiswa_id")
@@ -40,5 +40,10 @@ public class JadwalKuliahMahasiswa extends BaseEntity {
     this.mahasiswa = mahasiswa;
     this.matakuliah = matakuliah;
     this.jadwalKuliah = jadwalKuliah;
+  }
+
+  @Override
+  public int compareTo(JadwalKuliahMahasiswa o) {
+    return this.jadwalKuliah.compareTo(o.jadwalKuliah);
   }
 }

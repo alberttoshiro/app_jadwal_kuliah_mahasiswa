@@ -11,12 +11,10 @@ import org.hibernate.query.Query;
 
 public abstract class BaseDAO<T extends BaseEntity> {
 
-  protected PostgresDatabase postgresDatabase;
   protected Class<T> entityClass;
 
-  public BaseDAO(PostgresDatabase postgresDatabase) {
+  public BaseDAO() {
     super();
-    this.postgresDatabase = postgresDatabase;
   }
 
   public Query<T> createQuery(String stringQuery, Session session) {
@@ -24,8 +22,8 @@ public abstract class BaseDAO<T extends BaseEntity> {
   }
 
   public void delete(T entity) {
-    Session session = postgresDatabase.getSession();
-    Transaction transaction = postgresDatabase.getTransaction(session);
+    Session session = PostgresDatabase.getSession();
+    Transaction transaction = PostgresDatabase.getTransaction(session);
     session.delete(entity);
     transaction.commit();
     session.close();
@@ -33,7 +31,7 @@ public abstract class BaseDAO<T extends BaseEntity> {
 
   @Transactional
   public T findById(UUID id) {
-    Session session = postgresDatabase.getSession();
+    Session session = PostgresDatabase.getSession();
     T t = session.get(entityClass, id);
     session.close();
     return t;
@@ -41,7 +39,7 @@ public abstract class BaseDAO<T extends BaseEntity> {
 
   @SuppressWarnings("unchecked")
   public List<T> getAll() {
-    Session session = postgresDatabase.getSession();
+    Session session = PostgresDatabase.getSession();
     List<T> list = session.createQuery("from " + entityClass.getName()).list();
     session.close();
     return list;
@@ -49,8 +47,8 @@ public abstract class BaseDAO<T extends BaseEntity> {
 
   @Transactional
   public void save(T entity) {
-    Session session = postgresDatabase.getSession();
-    Transaction transaction = postgresDatabase.getTransaction(session);
+    Session session = PostgresDatabase.getSession();
+    Transaction transaction = PostgresDatabase.getTransaction(session);
     if (entity.getId() == null) {
       entity.setId(UUID.randomUUID());
     }
@@ -64,8 +62,8 @@ public abstract class BaseDAO<T extends BaseEntity> {
   }
 
   public void update(T entity) {
-    Session session = postgresDatabase.getSession();
-    Transaction transaction = postgresDatabase.getTransaction(session);
+    Session session = PostgresDatabase.getSession();
+    Transaction transaction = PostgresDatabase.getTransaction(session);
     session.update(entity);;
     transaction.commit();
     session.close();

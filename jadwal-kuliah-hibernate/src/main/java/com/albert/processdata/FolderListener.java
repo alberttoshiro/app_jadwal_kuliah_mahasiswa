@@ -7,27 +7,24 @@ import com.albert.dao.JadwalKuliahDAO;
 import com.albert.dao.JadwalKuliahMahasiswaDAO;
 import com.albert.dao.MahasiswaDAO;
 import com.albert.dao.MatakuliahDAO;
-import com.albert.database.PostgresDatabase;
 
 public class FolderListener implements Runnable {
 
-  private PostgresDatabase postgresDatabase;
   private MahasiswaDAO mahasiswaDAO;
   private MatakuliahDAO matakuliahDAO;
   private JadwalKuliahDAO jadwalKuliahDAO;
   private JadwalKuliahMahasiswaDAO jadwalKuliahMahasiswaDAO;
 
-  public FolderListener(PostgresDatabase postgresDatabase) {
+  public FolderListener() {
     super();
-    this.postgresDatabase = postgresDatabase;
     initDAO();
   }
 
   public void initDAO() {
-    mahasiswaDAO = new MahasiswaDAO(postgresDatabase);
-    matakuliahDAO = new MatakuliahDAO(postgresDatabase);
-    jadwalKuliahDAO = new JadwalKuliahDAO(postgresDatabase);
-    jadwalKuliahMahasiswaDAO = new JadwalKuliahMahasiswaDAO(postgresDatabase);
+    mahasiswaDAO = new MahasiswaDAO();
+    matakuliahDAO = new MatakuliahDAO();
+    jadwalKuliahDAO = new JadwalKuliahDAO();
+    jadwalKuliahMahasiswaDAO = new JadwalKuliahMahasiswaDAO();
   }
 
   public void newProcessDataThread(Runnable runnableTask, List<Thread> threads) {

@@ -1,11 +1,12 @@
 package com.albert.dao;
 
 import java.util.List;
-import com.albert.database.PostgresDatabase;
+import javax.enterprise.context.ApplicationScoped;
+import javax.persistence.Query;
+import javax.transaction.Transactional;
 import com.albert.model.Mahasiswa;
-import org.hibernate.Session;
-import org.hibernate.query.Query;
 
+@ApplicationScoped
 public class MahasiswaDAO extends BaseDAO<Mahasiswa> {
 
   public MahasiswaDAO() {
@@ -13,23 +14,27 @@ public class MahasiswaDAO extends BaseDAO<Mahasiswa> {
     this.setEntityClass(Mahasiswa.class);
   }
 
+  @Transactional
+  @SuppressWarnings("unchecked")
   public List<Mahasiswa> findByNama(String nama) {
-    String stringQuery = "from Mahasiswa where nama like :nama";
-    Session session = PostgresDatabase.getSession();
-    Query<Mahasiswa> query = createQuery(stringQuery, session);
-    query.setParameter("nama", "%" + nama + "%");
-    List<Mahasiswa> list = query.list();
-    session.close();
-    return list;
+    String stringQuery =
+        String.format("SELECT m from Mahasiswa m WHERE m.nama LIKE '%%%s%%'", nama);
+    Query query = entityManager.createQuery(stringQuery, entityClass);
+    return query.getResultList();
   }
 
+  @Transactional
+  @SuppressWarnings("unchecked")
   public List<Mahasiswa> findByNim(String nim) {
-    String stringQuery = "from Mahasiswa where nim like :nim";
-    Session session = PostgresDatabase.getSession();
-    Query<Mahasiswa> query = createQuery(stringQuery, session);
-    query.setParameter("nim", "%" + nim + "%");
-    List<Mahasiswa> list = query.list();
-    session.close();
-    return list;
+    String stringQuery = String.format("SELECT m from Mahasiswa m WHERE m.nim LIKE '%%%s%%'", nim);
+    Query query = entityManager.createQuery(stringQuery, entityClass);
+    return query.getResultList();
   }
+
+  @Override
+  public void updateEntity(Mahasiswa t, Mahasiswa entity) {
+    t.setNim(entity.getNim());
+    t.setNama(entity.getNama());
+  }
+
 }

@@ -1,11 +1,13 @@
 package com.albert;
 
 import java.util.List;
+import javax.ws.rs.Path;
 import com.albert.dao.JadwalKuliahMahasiswaDAO;
 import com.albert.dao.MahasiswaDAO;
 import com.albert.model.JadwalKuliahMahasiswa;
 import com.albert.model.Mahasiswa;
 
+@Path("/search")
 public class Search {
   private static MahasiswaDAO mahasiswaDAO = new MahasiswaDAO();
   private static JadwalKuliahMahasiswaDAO jadwalKuliahMahasiswaDAO = new JadwalKuliahMahasiswaDAO();

@@ -3,18 +3,23 @@ package com.albert.dao;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-import com.albert.database.PostgresDatabase;
-import com.albert.model.JadwalKuliah;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import javax.persistence.Query;
+import javax.transaction.Transactional;
 import com.albert.model.JadwalKuliahMahasiswa;
 import com.albert.model.Mahasiswa;
-import com.albert.model.Matakuliah;
-import org.hibernate.Session;
-import org.hibernate.query.Query;
 
+@ApplicationScoped
 public class JadwalKuliahMahasiswaDAO extends BaseDAO<JadwalKuliahMahasiswa> {
 
+  @Inject
   private MahasiswaDAO mahasiswaDAO;
+
+  @Inject
   private MatakuliahDAO matakuliahDAO;
+
+  @Inject
   private JadwalKuliahDAO jadwalKuliahDAO;
 
   public JadwalKuliahMahasiswaDAO() {
@@ -24,33 +29,29 @@ public class JadwalKuliahMahasiswaDAO extends BaseDAO<JadwalKuliahMahasiswa> {
 
   public JadwalKuliahMahasiswa convertToJadwalKuliahMahasiswa(UUID mahasiswaId, UUID matakuliahId,
       UUID jadwalKuliahId) {
-    if (mahasiswaDAO == null) {
-      mahasiswaDAO = new MahasiswaDAO();
-    }
-    if (matakuliahDAO == null) {
-      matakuliahDAO = new MatakuliahDAO();
-    }
-    if (jadwalKuliahDAO == null) {
-      jadwalKuliahDAO = new JadwalKuliahDAO();
-    }
-    Mahasiswa mahasiswa = mahasiswaDAO.findById(mahasiswaId);
-    Matakuliah matakuliah = matakuliahDAO.findById(matakuliahId);
-    JadwalKuliah jadwalKuliah = jadwalKuliahDAO.findById(jadwalKuliahId);
     JadwalKuliahMahasiswa jadwalKuliahMahasiswa = new JadwalKuliahMahasiswa();
-    jadwalKuliahMahasiswa.setMahasiswa(mahasiswa);
-    jadwalKuliahMahasiswa.setMatakuliah(matakuliah);
-    jadwalKuliahMahasiswa.setJadwalKuliah(jadwalKuliah);
+    jadwalKuliahMahasiswa.setMahasiswa(mahasiswaDAO.findById(mahasiswaId));
+    jadwalKuliahMahasiswa.setMatakuliah(matakuliahDAO.findById(matakuliahId));
+    jadwalKuliahMahasiswa.setJadwalKuliah(jadwalKuliahDAO.findById(jadwalKuliahId));
     return jadwalKuliahMahasiswa;
   }
 
+  @Transactional
+  @SuppressWarnings("unchecked")
   public List<JadwalKuliahMahasiswa> findByMahasiswa(Mahasiswa mahasiswa) {
-    Session session = PostgresDatabase.getSession();
-    String stringQuery = "from JadwalKuliahMahasiswa where mahasiswa_id = :mahasiswaId";
-    Query<JadwalKuliahMahasiswa> query = createQuery(stringQuery, session);
-    query.setParameter("mahasiswaId", mahasiswa.getId());
-    List<JadwalKuliahMahasiswa> list = query.list();
-    session.close();
+    String stringQuery = String.format(
+        "SELECT jkm from JadwalKuliahMahasiswa jkm WHERE jkm.mahasiswa_id = ", mahasiswa.getId());
+    Query query = entityManager.createQuery(stringQuery, entityClass);
+    List<JadwalKuliahMahasiswa> list = query.getResultList();
     Collections.sort(list);
     return list;
+  }
+
+  @Transactional
+  @Override
+  public void updateEntity(JadwalKuliahMahasiswa t, JadwalKuliahMahasiswa entity) {
+    t.setMahasiswa(entity.getMahasiswa());
+    t.setMatakuliah(entity.getMatakuliah());
+    t.setJadwalKuliah(entity.getJadwalKuliah());
   }
 }

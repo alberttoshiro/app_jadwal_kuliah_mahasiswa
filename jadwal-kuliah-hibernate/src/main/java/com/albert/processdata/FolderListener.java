@@ -3,6 +3,7 @@ package com.albert.processdata;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import javax.inject.Inject;
 import com.albert.dao.JadwalKuliahDAO;
 import com.albert.dao.JadwalKuliahMahasiswaDAO;
 import com.albert.dao.MahasiswaDAO;
@@ -10,22 +11,29 @@ import com.albert.dao.MatakuliahDAO;
 
 public class FolderListener implements Runnable {
 
-  private MahasiswaDAO mahasiswaDAO;
-  private MatakuliahDAO matakuliahDAO;
-  private JadwalKuliahDAO jadwalKuliahDAO;
-  private JadwalKuliahMahasiswaDAO jadwalKuliahMahasiswaDAO;
+  @Inject
+  MahasiswaDAO mahasiswaDAO;
+
+  @Inject
+  MatakuliahDAO matakuliahDAO;
+
+  @Inject
+  JadwalKuliahDAO jadwalKuliahDAO;
+
+  @Inject
+  JadwalKuliahMahasiswaDAO jadwalKuliahMahasiswaDAO;
 
   public FolderListener() {
     super();
-    initDAO();
+    // initDAO();
   }
 
-  public void initDAO() {
-    mahasiswaDAO = new MahasiswaDAO();
-    matakuliahDAO = new MatakuliahDAO();
-    jadwalKuliahDAO = new JadwalKuliahDAO();
-    jadwalKuliahMahasiswaDAO = new JadwalKuliahMahasiswaDAO();
-  }
+  // public void initDAO() {
+  // mahasiswaDAO = new MahasiswaDAO();
+  // matakuliahDAO = new MatakuliahDAO();
+  // jadwalKuliahDAO = new JadwalKuliahDAO();
+  // jadwalKuliahMahasiswaDAO = new JadwalKuliahMahasiswaDAO();
+  // }
 
   public void newProcessDataThread(Runnable runnableTask, List<Thread> threads) {
     Thread t = new Thread(runnableTask);

@@ -1,14 +1,21 @@
 package com.albert.dao;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
 import com.albert.model.Matakuliah;
 
 @ApplicationScoped
 public class MatakuliahDAO extends BaseDAO<Matakuliah> {
 
-  public MatakuliahDAO() {
-    super();
-    this.setEntityClass(Matakuliah.class);
+  @Inject
+  EntityManager entityManager;
+
+  @PostConstruct
+  public void init() {
+    setEntityClass(Matakuliah.class);
+    setEntityManager(entityManager);
   }
 
   @Override

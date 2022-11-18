@@ -1,82 +1,139 @@
 package com.albert;
 
 import java.util.List;
+import javax.inject.Inject;
+import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import com.albert.dao.JadwalKuliahMahasiswaDAO;
 import com.albert.dao.MahasiswaDAO;
 import com.albert.model.JadwalKuliahMahasiswa;
 import com.albert.model.Mahasiswa;
+import org.jboss.logging.Logger;
 
 @Path("/search")
-public class Search {
-  private static MahasiswaDAO mahasiswaDAO = new MahasiswaDAO();
-  private static JadwalKuliahMahasiswaDAO jadwalKuliahMahasiswaDAO = new JadwalKuliahMahasiswaDAO();
 
-  public static List<Mahasiswa> getMahasiswa(String searchBy) {
-    if (searchBy.startsWith("nama:")) {
-      searchBy = searchBy.replace("nama:", "");
-      return mahasiswaDAO.findByNama(searchBy);
-    } else if (searchBy.startsWith("nim:")) {
-      searchBy = searchBy.replace("nim:", "");
-      return mahasiswaDAO.findByNim(searchBy);
+public class Search {
+
+  @Inject
+  Logger log;
+
+  @Inject
+  MahasiswaDAO mahasiswaDAO;
+
+  @Inject
+  JadwalKuliahMahasiswaDAO jadwalKuliahMahasiswaDAO;
+
+  @GET
+  @Path("mahasiswa/getall")
+  @Produces(MediaType.TEXT_PLAIN)
+  public String getAll() {
+    String result = "Result of get all mahasiswa: \n";
+    List<Mahasiswa> listMahasiswa = mahasiswaDAO.getAll();
+    for (Mahasiswa mahasiswa : listMahasiswa) {
+      result = result.concat(mahasiswa.toString() + "\n");
+    }
+    log.info(result);
+    return result;
+  }
+
+  @GET
+  @Path("jkm/getall")
+  @Produces(MediaType.TEXT_PLAIN)
+  public String getAllJKM() {
+    String result = "Result of get all jadwal kuliah mahasiswa: \n";
+    List<JadwalKuliahMahasiswa> list = jadwalKuliahMahasiswaDAO.getAll();
+    for (JadwalKuliahMahasiswa jkm : list) {
+      result = result.concat(jkm.toString() + "\n");
+    }
+    log.info(result);
+    return result;
+  }
+
+  public List<Mahasiswa> getMahasiswa(String searchBy, String value) {
+    if (searchBy.equals("nama")) {
+      return mahasiswaDAO.findByNama(value);
+    } else if (searchBy.equals("nim")) {
+      return mahasiswaDAO.findByNim(value);
     } else {
-      System.out.println("Please use prefix nama: or nim: followed by your name or nim");
       return null;
     }
   }
 
-  public static void main(String[] args) {
-    String search = "";
-    if (args.length < 1) {
-      search = "nama:";
-      System.out.println("Searching with default search: " + search);
-    } else {
-      search = args[0];
-      System.out.println("Searching with search: " + search);
+  @GET
+  @Produces(MediaType.TEXT_PLAIN)
+  @Path("mahasiswa/nim/{nim}")
+  public String getMahasiswaByNim(String nim) {
+    String result = "Result of get mahasiswa by nim : " + nim + "\n";
+    List<Mahasiswa> listMahasiswa = mahasiswaDAO.findByNim(nim);
+    for (Mahasiswa mahasiswa : listMahasiswa) {
+      result = result.concat(mahasiswa.toString() + "\n");
     }
-    search = search.toLowerCase();
-
-    search(search);
+    log.info(result);
+    return result;
   }
 
-  public static void printSeparator(char c) {
+  public String printSeparator(char c) {
+    String separator = "";
     for (int i = 0; i < 90; i++) {
-      System.out.print(c);
+      separator = separator.concat(Character.toString(c));
     }
-    System.out.println();
+    separator = separator.concat("\n");
+    return separator;
   }
 
-  public static void search(String searchBy) {
-    List<Mahasiswa> listMahasiswa = getMahasiswa(searchBy);
+  public String search(String searchBy, String value) {
+    List<Mahasiswa> listMahasiswa = getMahasiswa(searchBy, value);
 
     if (listMahasiswa == null) {
-      return;
+      log.info("No mahasiswa found");
+      return "No mahasiswa found";
     }
     if (listMahasiswa.isEmpty()) {
-      System.out.println("Mahasiswa not found...");
-      return;
+      log.info("No mahasiswa found");
+      return "No mahasiswa found";
     }
 
+    String result = "Search result: \n";
     for (Mahasiswa mahasiswa : listMahasiswa) {
       List<JadwalKuliahMahasiswa> listJadwalKuliahMahasiswa =
           jadwalKuliahMahasiswaDAO.findByMahasiswa(mahasiswa);
-      printSeparator('=');
-      System.out.println(mahasiswa.getNama() + ", NIM: " + mahasiswa.getNim());
-      printSeparator('=');
+      result = result.concat(printSeparator('='));
+      result = result.concat(mahasiswa.getNama() + ", NIM: " + mahasiswa.getNim() + "\n");
+      result = result.concat(printSeparator('='));
       if (listJadwalKuliahMahasiswa == null || listJadwalKuliahMahasiswa.isEmpty()) {
-        System.out.println("You have no schedule for now...");
-        printSeparator('-');
+        result = result.concat("You have no schedule for now...\n");
+        result = result.concat(printSeparator('-'));
         continue;
       }
       for (JadwalKuliahMahasiswa jadwalKuliahMahasiswa : listJadwalKuliahMahasiswa) {
-        System.out.printf("%-10s | %-40s | %-10s | %-5s - %-5s |%n",
+        String jadwal = String.format("%-10s | %-40s | %-10s | %-5s - %-5s |\n",
             jadwalKuliahMahasiswa.getJadwalKuliah().getHari(),
             jadwalKuliahMahasiswa.getMatakuliah().getNamaMatakuliah(),
             jadwalKuliahMahasiswa.getJadwalKuliah().getRuangan(),
             jadwalKuliahMahasiswa.getJadwalKuliah().getWaktuMulai(),
             jadwalKuliahMahasiswa.getJadwalKuliah().getWaktuSelesai());
+        result = result.concat(jadwal);
       }
-      printSeparator('-');
+      result = result.concat(printSeparator('-'));
+
     }
+    log.info(result);
+    return result;
+  }
+
+  @GET
+  @Path("nama/{nama}")
+  @Produces(MediaType.TEXT_PLAIN)
+  public String searchNama(String nama) {
+    return search("nama", nama);
+  }
+
+  @GET
+  @Path("nim/{nim}")
+  @Produces(MediaType.TEXT_PLAIN)
+  public String searchNim(String nim) {
+    return search("nim", nim);
   }
 }

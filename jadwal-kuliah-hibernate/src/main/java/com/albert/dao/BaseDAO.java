@@ -2,7 +2,6 @@ package com.albert.dao;
 
 import java.util.List;
 import java.util.UUID;
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -10,17 +9,14 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 import com.albert.model.BaseEntity;
+import io.quarkus.logging.Log;
+
 
 public abstract class BaseDAO<T extends BaseEntity> {
 
-  @Inject
-  EntityManager entityManager;
+  private EntityManager entityManager;
 
-  protected Class<T> entityClass;
-
-  public BaseDAO() {
-    super();
-  }
+  private Class<T> entityClass;
 
   @Transactional
   public void delete(UUID id) {
@@ -44,8 +40,19 @@ public abstract class BaseDAO<T extends BaseEntity> {
     return typedQuery.getResultList();
   }
 
+  public Class<T> getEntityClass() {
+    return entityClass;
+  }
+
+  public EntityManager getEntityManager() {
+    return entityManager;
+  }
+
   @Transactional
   public void save(T entity) {
+    if (entityManager == null) {
+      Log.info("entity manager null");
+    }
     if (entity.getId() == null) {
       entity.setId(UUID.randomUUID());
     }
@@ -54,6 +61,10 @@ public abstract class BaseDAO<T extends BaseEntity> {
 
   protected void setEntityClass(Class<T> entityClass) {
     this.entityClass = entityClass;
+  }
+
+  public void setEntityManager(EntityManager entityManager) {
+    this.entityManager = entityManager;
   }
 
   @Transactional

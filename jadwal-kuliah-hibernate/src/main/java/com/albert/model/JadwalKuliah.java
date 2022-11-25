@@ -1,11 +1,11 @@
 package com.albert.model;
 
-import java.time.LocalTime;
 import java.util.UUID;
-import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import com.albert.util.HariUtil;
+import javax.persistence.UniqueConstraint;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -14,40 +14,31 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString(callSuper = true)
-@Table(name = "jadwal_kuliah")
-public class JadwalKuliah extends BaseEntity implements Comparable<JadwalKuliah> {
+@Table(name = "jadwal_kuliah", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"mahasiswa_id", "matakuliah_id", "ruangan_waktu_id"})})
+public class JadwalKuliah extends BaseEntity {
 
-  @Column(name = "hari")
-  private String hari;
+  @ManyToOne
+  @JoinColumn(name = "mahasiswa_id")
+  private Mahasiswa mahasiswa;
 
-  @Column(name = "ruangan")
-  private String ruangan;
+  @ManyToOne
+  @JoinColumn(name = "matakuliah_id")
+  private Matakuliah matakuliah;
 
-  @Column(name = "waktu_mulai")
-  private LocalTime waktuMulai;
-
-  @Column(name = "waktu_selesai")
-  private LocalTime waktuSelesai;
+  @ManyToOne
+  @JoinColumn(name = "ruangan_waktu_id")
+  private RuanganWaktu ruanganWaktu;
 
   public JadwalKuliah() {
     super();
   }
 
-  public JadwalKuliah(UUID id, String hari, String ruangan, LocalTime waktuMulai,
-      LocalTime waktuSelesai) {
+  public JadwalKuliah(UUID id, Mahasiswa mahasiswa, Matakuliah matakuliah,
+      RuanganWaktu ruanganWaktu) {
     super(id);
-    this.hari = hari;
-    this.ruangan = ruangan;
-    this.waktuMulai = waktuMulai;
-    this.waktuSelesai = waktuSelesai;
-  }
-
-  @Override
-  public int compareTo(JadwalKuliah o) {
-    int hari = HariUtil.getOrder(this.hari).compareTo(HariUtil.getOrder(o.hari));
-    if (hari != 0) {
-      return hari;
-    }
-    return this.waktuMulai.compareTo(o.waktuMulai);
+    this.mahasiswa = mahasiswa;
+    this.matakuliah = matakuliah;
+    this.ruanganWaktu = ruanganWaktu;
   }
 }

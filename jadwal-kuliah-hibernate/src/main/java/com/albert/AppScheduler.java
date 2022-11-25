@@ -26,9 +26,9 @@ public class AppScheduler {
   @Inject
   Logger log;
 
-  @Scheduled(every = "1S")
+  @Scheduled(every = "5S")
   public void checkFolderCompose() throws IOException {
-    log.info("checking folder compose");
+    log.trace("checking folder compose");
     File composeFolder = new File(FOLDER_COMPOSE);
     File[] listOfFilesCompose = composeFolder.listFiles();
     if (listOfFilesCompose.length > 0) {
@@ -36,25 +36,28 @@ public class AppScheduler {
         if (file.isFile()) {
           String fileName = file.getName();
           String filePath = String.format("%s/%s", FOLDER_COMPOSE, fileName);
-          if (fileName.startsWith("jadwal_kuliah_mahasiswa")) {
-            log.info("found jadwal kuliah mahasiswa file");
+          if (fileName.startsWith("jadwal_kuliah")) {
+            log.trace("found jadwal kuliah file");
             try {
-              eventBus.publish("processJadwalKuliahMahasiswa", filePath);
+              eventBus.publish("processJadwalKuliah", filePath);
             } catch (Exception e) {
-              log.info(e);
-              log.info("You have to process master files first");
+              log.trace(e);
+              log.trace("You have to process master files first");
               throw e;
             }
 
+          } else if (fileName.startsWith("ruangan_waktu")) {
+            log.trace("found ruangan waktu file");
+            eventBus.publish("processRuanganWaktu", filePath);
           }
         }
       }
     }
   }
 
-  @Scheduled(every = "1S")
+  @Scheduled(every = "2S")
   public void checkFolderMaster() throws IOException {
-    log.info("checking folder master");
+    log.trace("checking folder master");
     File masterFolder = new File(FOLDER_MASTER);
     File[] listOfFilesMaster = masterFolder.listFiles();
     if (listOfFilesMaster.length > 0) {
@@ -63,14 +66,20 @@ public class AppScheduler {
           String fileName = file.getName();
           String filePath = String.format("%s/%s", FOLDER_MASTER, fileName);
           if (fileName.startsWith("mahasiswa")) {
-            log.info("found mahasiswa file");
+            log.trace("found mahasiswa file");
             eventBus.publish("processMahasiswa", filePath);
           } else if (fileName.startsWith("matakuliah")) {
-            log.info("found matakuliah file");
+            log.trace("found matakuliah file");
             eventBus.publish("processMatakuliah", filePath);
-          } else if (fileName.startsWith("jadwal_kuliah")) {
-            log.info("found jadwal kuliah file");
-            eventBus.publish("processJadwalKuliah", filePath);
+          } else if (fileName.startsWith("ruangan")) {
+            log.trace("found ruangan file");
+            eventBus.publish("processRuangan", filePath);
+          } else if (fileName.startsWith("waktu")) {
+            log.trace("found waktu file");
+            eventBus.publish("processWaktu", filePath);
+          } else if (fileName.startsWith("hari")) {
+            log.trace("found ruangan file");
+            eventBus.publish("processHari", filePath);
           }
         }
       }

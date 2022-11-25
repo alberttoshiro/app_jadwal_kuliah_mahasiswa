@@ -5,8 +5,8 @@ import java.util.UUID;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import com.albert.dao.JadwalKuliahDAO;
+import com.albert.dao.MatakuliahDAO;
 import com.albert.model.JadwalKuliah;
-import com.albert.util.AppUtil;
 import io.quarkus.vertx.ConsumeEvent;
 
 @ApplicationScoped
@@ -15,19 +15,24 @@ public class JadwalKuliahConsumer extends BaseConsumer {
   @Inject
   JadwalKuliahDAO jadwalKuliahDAO;
 
+  @Inject
+  MatakuliahDAO matakuliahDAO;
+
   @Override
   public void insert(String[] param) {
-    JadwalKuliah jadwalKuliah = new JadwalKuliah();
-    jadwalKuliah.setId(UUID.fromString(param[0]));
-    jadwalKuliah.setHari(param[1]);
-    jadwalKuliah.setRuangan(param[2]);
-    jadwalKuliah.setWaktuMulai(AppUtil.convertStringToLocalTime(param[3]));
-    jadwalKuliah.setWaktuSelesai(AppUtil.convertStringToLocalTime(param[4]));
+    UUID id = UUID.fromString(param[0]);
+    UUID mahasiswaId = UUID.fromString(param[1]);
+    UUID matakuliahId = UUID.fromString(param[2]);
+    UUID ruanganWaktuId = UUID.fromString(param[3]);
+    JadwalKuliah jadwalKuliah =
+        jadwalKuliahDAO.convertToJadwalKuliah(mahasiswaId, matakuliahId, ruanganWaktuId);
+    jadwalKuliah.setId(id);
     jadwalKuliahDAO.save(jadwalKuliah);
+    matakuliahDAO.addMatakuliahToMahasiswa(mahasiswaId, matakuliahId);
   }
 
   @ConsumeEvent(value = "processJadwalKuliah", blocking = true)
   public void processJadwalKuliah(String filePath) throws IOException {
-    processFile(filePath, "master", "master-done");
+    processFile(filePath, "compose", "compose-done");
   }
 }

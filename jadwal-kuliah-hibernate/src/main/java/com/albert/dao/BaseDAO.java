@@ -63,7 +63,7 @@ public abstract class BaseDAO<T extends BaseEntity> {
     this.entityClass = entityClass;
   }
 
-  public void setEntityManager(EntityManager entityManager) {
+  protected void setEntityManager(EntityManager entityManager) {
     this.entityManager = entityManager;
   }
 
@@ -73,5 +73,5 @@ public abstract class BaseDAO<T extends BaseEntity> {
     updateEntity(t, entity);
   }
 
-  public abstract void updateEntity(T t, T entity);
+  protected abstract void updateEntity(T t, T entity);
 }

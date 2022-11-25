@@ -8,7 +8,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
 import com.albert.model.Mahasiswa;
-import io.quarkus.logging.Log;
 
 @ApplicationScoped
 public class MahasiswaDAO extends BaseDAO<Mahasiswa> {
@@ -20,9 +19,9 @@ public class MahasiswaDAO extends BaseDAO<Mahasiswa> {
   @SuppressWarnings("unchecked")
   public List<Mahasiswa> findByNama(String nama) {
     nama = nama.toLowerCase();
-    String stringQuery =
-        String.format("SELECT m from Mahasiswa m WHERE LOWER(m.nama) LIKE '%%%s%%'", nama);
+    String stringQuery = "SELECT m from Mahasiswa m WHERE LOWER(m.nama) LIKE :nama";
     Query query = entityManager.createQuery(stringQuery, getEntityClass());
+    query.setParameter("nama", "%" + nama + "%");
     return query.getResultList();
   }
 
@@ -30,15 +29,9 @@ public class MahasiswaDAO extends BaseDAO<Mahasiswa> {
   @SuppressWarnings("unchecked")
   public List<Mahasiswa> findByNim(String nim) {
     nim = nim.toLowerCase();
-    if (entityManager == null) {
-      Log.info("ENTITY MANAGER NULL");
-      throw new IllegalArgumentException("ENTITY MANAGER NULL");
-    }
-    String stringQuery =
-        String.format("SELECT m from Mahasiswa m WHERE LOWER(m.nim) LIKE '%%%s%%'", nim);
-    Query query = null;
-    query = entityManager.createQuery(stringQuery, getEntityClass());
-
+    String stringQuery = "SELECT m from Mahasiswa m WHERE LOWER(m.nim) LIKE :nim";
+    Query query = entityManager.createQuery(stringQuery, getEntityClass());
+    query.setParameter("nim", "%" + nim + "%");
     return query.getResultList();
   }
 

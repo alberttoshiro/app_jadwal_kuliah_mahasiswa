@@ -1,8 +1,12 @@
 package com.albert.model;
 
+import java.util.Set;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -19,8 +23,13 @@ public class Mahasiswa extends BaseEntity {
   @Column(name = "nama")
   private String nama;
 
+  @ManyToMany
+  @JoinTable(name = "mahasiswa_matakuliah", joinColumns = @JoinColumn(name = "mahasiswa_id"),
+      inverseJoinColumns = @JoinColumn(name = "matakuliah_id"))
+  private Set<Matakuliah> listMatakuliah;
+
   public Mahasiswa() {
-    super();
+
   }
 
   public Mahasiswa(UUID id, String nim, String nama) {

@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import org.jboss.logging.Logger;
 
 public abstract class BaseConsumer {
+
   @Inject
   Logger log;
 
@@ -16,6 +17,7 @@ public abstract class BaseConsumer {
 
   public void moveFile(String filePath, String replace, String replaceWith) throws IOException {
     try {
+      log.trace("moving file " + filePath);
       Files.move(Paths.get(filePath), Paths.get(filePath.replace(replace, replaceWith)));
     } catch (IOException e) {
       log.error(e);
@@ -29,6 +31,7 @@ public abstract class BaseConsumer {
       String line = "";
       while ((line = br.readLine()) != null) {
         String[] param = line.split(";");
+        // System.out.println(Arrays.toString(param));
         insert(param);
       }
     } catch (IOException e) {

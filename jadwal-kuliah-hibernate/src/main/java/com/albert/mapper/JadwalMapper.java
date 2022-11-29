@@ -16,7 +16,7 @@ public class JadwalMapper {
     RuanganWaktu ruanganWaktu = jadwalKuliah.getRuanganWaktu();
     return new JadwalDTO(matakuliahMapper.toMatakuliahDTO(jadwalKuliah.getMatakuliah()),
         ruanganWaktu.getHari().getNamaHari(), ruanganWaktu.getRuangan().getNomorRuangan(),
-        ruanganWaktu.getWaktu().getWaktuMulai(), ruanganWaktu.getWaktu().getWaktuMulai());
+        ruanganWaktu.getWaktu().getWaktuMulai(), ruanganWaktu.getWaktu().getWaktuSelesai());
   }
 
 }

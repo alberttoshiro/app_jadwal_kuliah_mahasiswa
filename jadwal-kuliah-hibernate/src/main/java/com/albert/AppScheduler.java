@@ -46,9 +46,6 @@ public class AppScheduler {
               throw e;
             }
 
-          } else if (fileName.startsWith("ruangan_waktu")) {
-            log.trace("found ruangan waktu file");
-            eventBus.publish("processRuanganWaktu", filePath);
           }
         }
       }
@@ -71,15 +68,9 @@ public class AppScheduler {
           } else if (fileName.startsWith("matakuliah")) {
             log.trace("found matakuliah file");
             eventBus.publish("processMatakuliah", filePath);
-          } else if (fileName.startsWith("ruangan")) {
-            log.trace("found ruangan file");
-            eventBus.publish("processRuangan", filePath);
-          } else if (fileName.startsWith("waktu")) {
-            log.trace("found waktu file");
-            eventBus.publish("processWaktu", filePath);
-          } else if (fileName.startsWith("hari")) {
-            log.trace("found ruangan file");
-            eventBus.publish("processHari", filePath);
+          } else if (fileName.startsWith("ruangan_waktu")) {
+            log.trace("found ruangan waktu file");
+            eventBus.publish("processRuanganWaktu", filePath);
           }
         }
       }

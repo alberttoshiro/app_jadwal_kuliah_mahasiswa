@@ -1,6 +1,5 @@
 package com.albert.dto;
 
-import java.time.LocalTime;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,19 +9,20 @@ public class JadwalDTO {
 
   private MatakuliahDTO matakuliahDTO;
   private String hari;
+  private String tanggal;
   private String nomorRuangan;
-  private LocalTime waktuMulai;
-  private LocalTime waktuSelesai;
+  private String waktuMulai;
+  private String waktuSelesai;
 
   public JadwalDTO() {
 
   }
 
-  public JadwalDTO(MatakuliahDTO matakuliahDTO, String hari, String nomorRuangan,
-      LocalTime waktuMulai, LocalTime waktuSelesai) {
-    super();
+  public JadwalDTO(MatakuliahDTO matakuliahDTO, String hari, String tanggal, String nomorRuangan,
+      String waktuMulai, String waktuSelesai) {
     this.matakuliahDTO = matakuliahDTO;
     this.hari = hari;
+    this.tanggal = tanggal;
     this.nomorRuangan = nomorRuangan;
     this.waktuMulai = waktuMulai;
     this.waktuSelesai = waktuSelesai;

@@ -5,6 +5,8 @@ import javax.inject.Inject;
 import com.albert.dto.JadwalDTO;
 import com.albert.model.JadwalKuliah;
 import com.albert.model.RuanganWaktu;
+import com.albert.util.AppUtil;
+import com.albert.util.HariUtil;
 
 @ApplicationScoped
 public class JadwalMapper {
@@ -15,8 +17,11 @@ public class JadwalMapper {
   public JadwalDTO toJadwalDTO(JadwalKuliah jadwalKuliah) {
     RuanganWaktu ruanganWaktu = jadwalKuliah.getRuanganWaktu();
     return new JadwalDTO(matakuliahMapper.toMatakuliahDTO(jadwalKuliah.getMatakuliah()),
-        ruanganWaktu.getHari().getNamaHari(), ruanganWaktu.getRuangan().getNomorRuangan(),
-        ruanganWaktu.getWaktu().getWaktuMulai(), ruanganWaktu.getWaktu().getWaktuSelesai());
-  }
+        HariUtil.getNamaHari(ruanganWaktu.getWaktuMulai().getDayOfWeek().getValue()),
+        AppUtil.convertLocalDateTimeToStringDate(ruanganWaktu.getWaktuMulai()),
+        ruanganWaktu.getNomorRuangan(),
+        AppUtil.convertLocalDateTimeToTimeString(ruanganWaktu.getWaktuMulai()),
+        AppUtil.convertLocalDateTimeToTimeString(ruanganWaktu.getWaktuSelesai()));
 
+  }
 }

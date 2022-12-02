@@ -12,9 +12,14 @@ import com.albert.model.JadwalKuliah;
 import com.albert.model.Mahasiswa;
 import com.albert.model.Matakuliah;
 import com.albert.model.RuanganWaktu;
+import org.jboss.logging.Logger;
+import io.quarkus.logging.Log;
 
 @ApplicationScoped
 public class JadwalKuliahDAO extends BaseDAO<JadwalKuliah> {
+
+  @Inject
+  Logger log;
 
   @Inject
   EntityManager entityManager;
@@ -32,10 +37,22 @@ public class JadwalKuliahDAO extends BaseDAO<JadwalKuliah> {
   @SuppressWarnings("unchecked")
   public List<JadwalKuliah> findByMahasiswa(Mahasiswa mahasiswa) {
     String stringQuery =
-        "SELECT jk from JadwalKuliah jk WHERE jk.mahasiswa.id = :mahasiswaId ORDER BY jk.ruanganWaktu.hari.kodeHari, jk.ruanganWaktu.waktu.waktuMulai";
+        "SELECT jk from JadwalKuliah jk WHERE jk.mahasiswa.id = :mahasiswaId ORDER BY jk.ruanganWaktu.waktuMulai";
     Query query = entityManager.createQuery(stringQuery, getEntityClass());
     query.setParameter("mahasiswaId", mahasiswa.getId());
     List<JadwalKuliah> list = query.getResultList();
+    return list;
+  }
+
+  @Transactional
+  @SuppressWarnings("unchecked")
+  public List<JadwalKuliah> findByRuanganWaktuId(UUID ruanganWaktuId) {
+    String stringQuery =
+        "SELECT jk from JadwalKuliah jk WHERE jk.ruanganWaktu.id = :ruanganWaktuId";
+    Query query = entityManager.createQuery(stringQuery, getEntityClass());
+    query.setParameter("ruanganWaktuId", ruanganWaktuId);
+    List<JadwalKuliah> list = query.getResultList();
+    Log.info("JADWAL KULIAH ADA = " + list.size());
     return list;
   }
 

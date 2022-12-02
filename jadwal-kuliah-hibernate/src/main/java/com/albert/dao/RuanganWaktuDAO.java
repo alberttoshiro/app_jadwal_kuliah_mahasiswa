@@ -1,27 +1,42 @@
 package com.albert.dao;
 
-import java.util.UUID;
+import java.time.LocalDateTime;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import com.albert.model.Hari;
-import com.albert.model.Ruangan;
+import javax.persistence.Query;
+import javax.transaction.Transactional;
 import com.albert.model.RuanganWaktu;
-import com.albert.model.Waktu;
+import com.albert.util.AppUtil;
+import org.jboss.logging.Logger;
 
 @ApplicationScoped
 public class RuanganWaktuDAO extends BaseDAO<RuanganWaktu> {
 
   @Inject
+  Logger log;
+
+  @Inject
   EntityManager entityManager;
 
-  public RuanganWaktu convertToRuanganWaktu(UUID ruanganId, UUID hariId, UUID waktuId) {
-    RuanganWaktu ruanganWaktu = new RuanganWaktu();
-    ruanganWaktu.setRuangan(entityManager.getReference(Ruangan.class, ruanganId));
-    ruanganWaktu.setHari(entityManager.getReference(Hari.class, hariId));
-    ruanganWaktu.setWaktu(entityManager.getReference(Waktu.class, waktuId));
-    return ruanganWaktu;
+  @Transactional
+  @SuppressWarnings("unchecked")
+  public List<RuanganWaktu> findByDate(String nomorRuangan, LocalDateTime searchDate) {
+    LocalDateTime startDate = searchDate.with(AppUtil.convertStringToLocalTime("00:00"));
+    LocalDateTime endDate = searchDate.with(AppUtil.convertStringToLocalTime("23:59"));
+    log.info("START DATE = " + startDate);
+    log.info("END DATE = " + endDate);
+    String stringQuery =
+        "SELECT rw from RuanganWaktu rw WHERE rw.nomorRuangan = :nomorRuangan AND rw.waktuMulai >= :startDate AND rw.waktuMulai <= :endDate ORDER BY rw.waktuMulai";
+    Query query = entityManager.createQuery(stringQuery, getEntityClass());
+    query.setParameter("nomorRuangan", nomorRuangan);
+    query.setParameter("startDate", startDate);
+    query.setParameter("endDate", endDate);
+    List<RuanganWaktu> list = query.getResultList();
+    log.info("RUANGAN WAKTU ADA = " + list.size());
+    return list;
   }
 
   @PostConstruct
@@ -32,8 +47,9 @@ public class RuanganWaktuDAO extends BaseDAO<RuanganWaktu> {
 
   @Override
   public void updateEntity(RuanganWaktu t, RuanganWaktu entity) {
-    t.setRuangan(entity.getRuangan());
-    t.setHari(entity.getHari());
-    t.setWaktu(entity.getWaktu());
+    t.setId(entity.getId());
+    t.setNomorRuangan(entity.getNomorRuangan());
+    t.setWaktuMulai(entity.getWaktuMulai());
+    t.setWaktuSelesai(entity.getWaktuSelesai());
   }
 }

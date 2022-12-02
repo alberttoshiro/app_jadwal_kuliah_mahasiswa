@@ -1,11 +1,10 @@
 package com.albert.model;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -14,31 +13,28 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString(callSuper = true)
-@Table(name = "ruangan_waktu",
-    uniqueConstraints = {@UniqueConstraint(columnNames = {"ruangan_id", "hari_id", "waktu_id"})})
+@Table(name = "ruangan_waktu")
 public class RuanganWaktu extends BaseEntity {
 
-  @ManyToOne
-  @JoinColumn(name = "ruangan_id")
-  private Ruangan ruangan;
+  @Column(name = "nomor_ruangan")
+  private String nomorRuangan;
 
-  @ManyToOne
-  @JoinColumn(name = "hari_id")
-  private Hari hari;
+  @Column(name = "waktu_mulai")
+  private LocalDateTime waktuMulai;
 
-  @ManyToOne
-  @JoinColumn(name = "waktu_id")
-  private Waktu waktu;
+  @Column(name = "waktu_selesai")
+  private LocalDateTime waktuSelesai;
 
   public RuanganWaktu() {
 
   }
 
-  public RuanganWaktu(UUID id, Ruangan ruangan, Hari hari, Waktu waktu) {
+  public RuanganWaktu(UUID id, String nomorRuangan, LocalDateTime waktuMulai,
+      LocalDateTime waktuSelesai) {
     super(id);
-    this.ruangan = ruangan;
-    this.hari = hari;
-    this.waktu = waktu;
+    this.nomorRuangan = nomorRuangan;
+    this.waktuMulai = waktuMulai;
+    this.waktuSelesai = waktuSelesai;
   }
 
 }

@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import javax.inject.Inject;
 import org.jboss.logging.Logger;
 
@@ -19,6 +20,7 @@ public abstract class BaseConsumer {
     try {
       log.trace("moving file " + filePath);
       Files.move(Paths.get(filePath), Paths.get(filePath.replace(replace, replaceWith)));
+      log.info(filePath + " moved");
     } catch (IOException e) {
       log.error(e);
       throw e;
@@ -31,7 +33,7 @@ public abstract class BaseConsumer {
       String line = "";
       while ((line = br.readLine()) != null) {
         String[] param = line.split(";");
-        // System.out.println(Arrays.toString(param));
+        System.out.println(Arrays.toString(param));
         insert(param);
       }
     } catch (IOException e) {

@@ -4,6 +4,7 @@ import java.util.UUID;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import lombok.Getter;
@@ -26,7 +27,7 @@ public class JadwalKuliah extends BaseEntity {
   @JoinColumn(name = "matakuliah_id")
   private Matakuliah matakuliah;
 
-  @ManyToOne
+  @OneToOne
   @JoinColumn(name = "ruangan_waktu_id")
   private RuanganWaktu ruanganWaktu;
 

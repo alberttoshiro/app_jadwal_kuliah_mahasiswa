@@ -18,7 +18,6 @@ import com.albert.dto.MahasiswaMatakuliahDTO;
 import com.albert.mapper.JadwalKuliahMapper;
 import com.albert.mapper.MahasiswaMapper;
 import com.albert.mapper.MahasiswaMatakuliahMapper;
-import com.albert.model.JadwalKuliah;
 import com.albert.model.Mahasiswa;
 import org.jboss.logging.Logger;
 
@@ -77,8 +76,7 @@ public class MahasiswaEndpoint {
   public List<JadwalKuliahDTO> getJadwalKuliahDTO(List<Mahasiswa> listMahasiswa) {
     List<JadwalKuliahDTO> listJadwalKuliahDTO = new ArrayList<>();
     for (Mahasiswa mahasiswa : listMahasiswa) {
-      List<JadwalKuliah> listJadwalKuliah = jadwalKuliahDAO.findByMahasiswa(mahasiswa);
-      listJadwalKuliahDTO.add(jadwalKuliahMapper.toJadwalKuliahDTO(mahasiswa, listJadwalKuliah));
+      listJadwalKuliahDTO.add(jadwalKuliahMapper.toJadwalKuliahDTO(mahasiswa));
     }
     return listJadwalKuliahDTO;
   }

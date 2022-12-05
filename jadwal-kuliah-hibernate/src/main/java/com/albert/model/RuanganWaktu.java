@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,6 +26,9 @@ public class RuanganWaktu extends BaseEntity {
 
   @Column(name = "waktu_selesai")
   private LocalDateTime waktuSelesai;
+
+  @OneToOne(fetch = FetchType.LAZY, mappedBy = "ruanganWaktu")
+  private JadwalKuliah jadwalKuliah;
 
   public RuanganWaktu() {
 

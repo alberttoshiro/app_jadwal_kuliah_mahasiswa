@@ -2,12 +2,14 @@ package com.albert.dao;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
+import com.albert.model.Matakuliah;
 import com.albert.model.RuanganWaktu;
 import com.albert.util.AppUtil;
 import org.jboss.logging.Logger;
@@ -37,6 +39,13 @@ public class RuanganWaktuDAO extends BaseDAO<RuanganWaktu> {
     List<RuanganWaktu> list = query.getResultList();
     log.info("RUANGAN WAKTU ADA = " + list.size());
     return list;
+  }
+
+  @Transactional
+  public Matakuliah getMatakuliah(UUID ruanganWaktuId) {
+    RuanganWaktu ruanganWaktu = entityManager.find(getEntityClass(), ruanganWaktuId);
+    Matakuliah matakuliah = ruanganWaktu.getJadwalKuliah().getMatakuliah();
+    return matakuliah;
   }
 
   @PostConstruct

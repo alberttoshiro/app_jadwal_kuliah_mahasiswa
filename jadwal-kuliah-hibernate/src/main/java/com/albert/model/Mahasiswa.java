@@ -1,12 +1,11 @@
 package com.albert.model;
 
-import java.util.Set;
+import java.util.List;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -23,10 +22,8 @@ public class Mahasiswa extends BaseEntity {
   @Column(name = "nama")
   private String nama;
 
-  @ManyToMany
-  @JoinTable(name = "mahasiswa_matakuliah", joinColumns = @JoinColumn(name = "mahasiswa_id"),
-      inverseJoinColumns = @JoinColumn(name = "matakuliah_id"))
-  private Set<Matakuliah> listMatakuliah;
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "mahasiswa")
+  private List<JadwalKuliah> listJadwalKuliah;
 
   public Mahasiswa() {
 

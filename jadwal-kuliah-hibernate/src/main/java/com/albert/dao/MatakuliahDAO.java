@@ -1,6 +1,8 @@
 package com.albert.dao;
 
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -20,16 +22,11 @@ public class MatakuliahDAO extends BaseDAO<Matakuliah> {
   Logger log;
 
   @Transactional
-  public void addMatakuliahToMahasiswa(UUID mahasiswaId, UUID matakuliahId) {
-    Mahasiswa mahasiswa = entityManager.getReference(Mahasiswa.class, mahasiswaId);
-    mahasiswa.getListMatakuliah().add(entityManager.getReference(Matakuliah.class, matakuliahId));
-    if (mahasiswa.getListMatakuliah() == null) {
-      log.info("mahasiswa listmatakuliah null");
-    } else {
-      for (Matakuliah matakuliah : mahasiswa.getListMatakuliah()) {
-        log.info(mahasiswa.getNama() + " : " + matakuliah.getNamaMatakuliah());
-      }
-    }
+  public Set<Mahasiswa> getMahasiswa(UUID matakuliahId) {
+    Matakuliah matakuliah = entityManager.find(getEntityClass(), matakuliahId);
+    Set<Mahasiswa> listMahasiswa = matakuliah.getListJadwalKuliah().stream()
+        .map(t -> t.getMahasiswa()).collect(Collectors.toSet());
+    return listMahasiswa;
   }
 
   @PostConstruct

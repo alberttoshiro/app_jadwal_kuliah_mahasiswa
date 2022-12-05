@@ -1,6 +1,9 @@
 package com.albert.dao;
 
 import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -8,6 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
 import com.albert.model.Mahasiswa;
+import com.albert.model.Matakuliah;
 
 @ApplicationScoped
 public class MahasiswaDAO extends BaseDAO<Mahasiswa> {
@@ -33,6 +37,14 @@ public class MahasiswaDAO extends BaseDAO<Mahasiswa> {
     Query query = entityManager.createQuery(stringQuery, getEntityClass());
     query.setParameter("nim", "%" + nim + "%");
     return query.getResultList();
+  }
+
+  @Transactional
+  public Set<Matakuliah> getMatakuliah(UUID mahasiswaId) {
+    Mahasiswa mahasiswa = entityManager.find(getEntityClass(), mahasiswaId);
+    Set<Matakuliah> listMatakuliah = mahasiswa.getListJadwalKuliah().stream()
+        .map(t -> t.getMatakuliah()).collect(Collectors.toSet());
+    return listMatakuliah;
   }
 
   @PostConstruct

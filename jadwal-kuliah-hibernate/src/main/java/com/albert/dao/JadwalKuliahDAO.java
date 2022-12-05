@@ -13,7 +13,6 @@ import com.albert.model.Mahasiswa;
 import com.albert.model.Matakuliah;
 import com.albert.model.RuanganWaktu;
 import org.jboss.logging.Logger;
-import io.quarkus.logging.Log;
 
 @ApplicationScoped
 public class JadwalKuliahDAO extends BaseDAO<JadwalKuliah> {
@@ -52,7 +51,7 @@ public class JadwalKuliahDAO extends BaseDAO<JadwalKuliah> {
     Query query = entityManager.createQuery(stringQuery, getEntityClass());
     query.setParameter("ruanganWaktuId", ruanganWaktuId);
     List<JadwalKuliah> list = query.getResultList();
-    Log.info("JADWAL KULIAH ADA = " + list.size());
+    log.info("JADWAL KULIAH ADA = " + list.size());
     return list;
   }
 

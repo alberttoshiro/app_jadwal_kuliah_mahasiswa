@@ -41,7 +41,6 @@ public class JadwalKuliahConsumer extends BaseConsumer {
       }
     }
     jadwalKuliahDAO.save(jadwalKuliah);
-    matakuliahDAO.addMatakuliahToMahasiswa(mahasiswaId, matakuliahId);
   }
 
   @ConsumeEvent(value = "processJadwalKuliah", blocking = true)

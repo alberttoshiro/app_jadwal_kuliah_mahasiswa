@@ -5,20 +5,22 @@ import java.util.List;
 import java.util.UUID;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import com.albert.dao.JadwalKuliahDAO;
-import com.albert.dao.MatakuliahDAO;
+import javax.transaction.Transactional;
 import com.albert.model.JadwalKuliah;
+import com.albert.repository.JadwalKuliahRepository;
+import com.albert.repository.MatakuliahRepository;
 import io.quarkus.vertx.ConsumeEvent;
 
 @ApplicationScoped
 public class JadwalKuliahConsumer extends BaseConsumer {
 
   @Inject
-  JadwalKuliahDAO jadwalKuliahDAO;
+  JadwalKuliahRepository jadwalKuliahRepository;
 
   @Inject
-  MatakuliahDAO matakuliahDAO;
+  MatakuliahRepository matakuliahRepository;
 
+  @Transactional
   @Override
   public void insert(String[] param) {
     UUID id = UUID.fromString(param[0]);
@@ -26,9 +28,10 @@ public class JadwalKuliahConsumer extends BaseConsumer {
     UUID matakuliahId = UUID.fromString(param[2]);
     UUID ruanganWaktuId = UUID.fromString(param[3]);
     JadwalKuliah jadwalKuliah =
-        jadwalKuliahDAO.convertToJadwalKuliah(mahasiswaId, matakuliahId, ruanganWaktuId);
+        jadwalKuliahRepository.convertToJadwalKuliah(mahasiswaId, matakuliahId, ruanganWaktuId);
     jadwalKuliah.setId(id);
-    List<JadwalKuliah> listJadwalKuliah = jadwalKuliahDAO.findByRuanganWaktuId(ruanganWaktuId);
+    List<JadwalKuliah> listJadwalKuliah =
+        jadwalKuliahRepository.findByRuanganWaktuId(ruanganWaktuId);
     if (listJadwalKuliah != null) {
       if (listJadwalKuliah.size() > 0) {
         JadwalKuliah jadwalKuliahDB = listJadwalKuliah.get(0);
@@ -40,7 +43,7 @@ public class JadwalKuliahConsumer extends BaseConsumer {
         }
       }
     }
-    jadwalKuliahDAO.save(jadwalKuliah);
+    jadwalKuliahRepository.persist(jadwalKuliah);
   }
 
   @ConsumeEvent(value = "processJadwalKuliah", blocking = true)

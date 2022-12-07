@@ -4,10 +4,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import com.albert.dao.JadwalKuliahDAO;
 import com.albert.dto.JadwalKuliahDTO;
 import com.albert.model.JadwalKuliah;
 import com.albert.model.Mahasiswa;
+import com.albert.repository.JadwalKuliahRepository;
 
 @ApplicationScoped
 public class JadwalKuliahMapper {
@@ -19,12 +19,12 @@ public class JadwalKuliahMapper {
   JadwalMapper jadwalMapper;
 
   @Inject
-  JadwalKuliahDAO jadwalKuliahDAO;
+  JadwalKuliahRepository jadwalKuliahRepository;
 
   public JadwalKuliahDTO toJadwalKuliahDTO(Mahasiswa mahasiswa) {
     JadwalKuliahDTO jadwalKuliahDTO = new JadwalKuliahDTO();
     jadwalKuliahDTO.setMahasiswaDTO(mahasiswaMapper.toMahasiswaDTO(mahasiswa));
-    List<JadwalKuliah> listJadwalKuliah = jadwalKuliahDAO.findByMahasiswa(mahasiswa);
+    List<JadwalKuliah> listJadwalKuliah = jadwalKuliahRepository.findByMahasiswa(mahasiswa);
     if (listJadwalKuliah == null || listJadwalKuliah.size() == 0) {
       return jadwalKuliahDTO;
     }

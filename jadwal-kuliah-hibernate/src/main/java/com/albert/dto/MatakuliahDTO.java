@@ -11,7 +11,7 @@ public class MatakuliahDTO extends BaseDTO {
   private String namaMatakuliah;
 
   public MatakuliahDTO() {
-    super();
+
   }
 
   public MatakuliahDTO(UUID id, String namaMatakuliah) {

@@ -10,8 +10,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import com.albert.dao.JadwalKuliahDAO;
-import com.albert.dao.MahasiswaDAO;
 import com.albert.dto.JadwalKuliahDTO;
 import com.albert.dto.MahasiswaDTO;
 import com.albert.dto.MahasiswaMatakuliahDTO;
@@ -19,6 +17,8 @@ import com.albert.mapper.JadwalKuliahMapper;
 import com.albert.mapper.MahasiswaMapper;
 import com.albert.mapper.MahasiswaMatakuliahMapper;
 import com.albert.model.Mahasiswa;
+import com.albert.repository.JadwalKuliahRepository;
+import com.albert.repository.MahasiswaRepository;
 import org.jboss.logging.Logger;
 
 @Path("mahasiswa")
@@ -29,10 +29,10 @@ public class MahasiswaEndpoint {
   Logger log;
 
   @Inject
-  MahasiswaDAO mahasiswaDAO;
+  MahasiswaRepository mahasiswaRepository;
 
   @Inject
-  JadwalKuliahDAO jadwalKuliahDAO;
+  JadwalKuliahRepository jadwalKuliahRepository;
 
   @Inject
   MahasiswaMapper mahasiswaMapper;
@@ -46,31 +46,31 @@ public class MahasiswaEndpoint {
   @GET
   @Path("/")
   public List<MahasiswaDTO> getAllMahasiswa() {
-    return getMahasiswaDTO(mahasiswaDAO.getAll());
+    return getMahasiswaDTO(mahasiswaRepository.listAll());
   }
 
   @GET
   @Path("nama/{nama}")
   public List<MahasiswaDTO> getByNama(@PathParam("nama") String nama) {
-    return getMahasiswaDTO(mahasiswaDAO.findByNama(nama));
+    return getMahasiswaDTO(mahasiswaRepository.findByNama(nama));
   }
 
   @GET
   @Path("nim/{nim}")
   public List<MahasiswaDTO> getByNim(@PathParam("nim") String nim) {
-    return getMahasiswaDTO(mahasiswaDAO.findByNim(nim));
+    return getMahasiswaDTO(mahasiswaRepository.findByNim(nim));
   }
 
   @GET
   @Path("nama/{nama}/jadwal-kuliah")
   public List<JadwalKuliahDTO> getJadwalKuliahByNama(@PathParam("nama") String nama) {
-    return getJadwalKuliahDTO(mahasiswaDAO.findByNama(nama));
+    return getJadwalKuliahDTO(mahasiswaRepository.findByNama(nama));
   }
 
   @GET
   @Path("nim/{nim}/jadwal-kuliah")
   public List<JadwalKuliahDTO> getJadwalKuliahByNim(@PathParam("nim") String nim) {
-    return getJadwalKuliahDTO(mahasiswaDAO.findByNim(nim));
+    return getJadwalKuliahDTO(mahasiswaRepository.findByNim(nim));
   }
 
   public List<JadwalKuliahDTO> getJadwalKuliahDTO(List<Mahasiswa> listMahasiswa) {
@@ -90,14 +90,14 @@ public class MahasiswaEndpoint {
   @Path("nama/{nama}/matakuliah")
   @Transactional
   public List<MahasiswaMatakuliahDTO> getMahasiswaMatakuliahByNama(@PathParam("nama") String nama) {
-    return getMahasiswaMatakuliahDTO(mahasiswaDAO.findByNama(nama));
+    return getMahasiswaMatakuliahDTO(mahasiswaRepository.findByNama(nama));
   }
 
   @GET
   @Path("nim/{nim}/matakuliah")
   @Transactional
   public List<MahasiswaMatakuliahDTO> getMahasiswaMatakuliahByNim(@PathParam("nim") String nim) {
-    return getMahasiswaMatakuliahDTO(mahasiswaDAO.findByNim(nim));
+    return getMahasiswaMatakuliahDTO(mahasiswaRepository.findByNim(nim));
   }
 
   public List<MahasiswaMatakuliahDTO> getMahasiswaMatakuliahDTO(List<Mahasiswa> listMahasiswa) {

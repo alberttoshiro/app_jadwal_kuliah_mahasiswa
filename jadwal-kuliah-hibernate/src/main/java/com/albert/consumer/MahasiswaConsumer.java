@@ -4,23 +4,25 @@ import java.io.IOException;
 import java.util.UUID;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import com.albert.dao.MahasiswaDAO;
+import javax.transaction.Transactional;
 import com.albert.model.Mahasiswa;
+import com.albert.repository.MahasiswaRepository;
 import io.quarkus.vertx.ConsumeEvent;
 
 @ApplicationScoped
 public class MahasiswaConsumer extends BaseConsumer {
 
   @Inject
-  MahasiswaDAO mahasiswaDAO;
+  MahasiswaRepository mahasiswaRepository;
 
+  @Transactional
   @Override
   public void insert(String[] param) {
     Mahasiswa mahasiswa = new Mahasiswa();
     mahasiswa.setId(UUID.fromString(param[0]));
     mahasiswa.setNim(param[1]);
     mahasiswa.setNama(param[2]);
-    mahasiswaDAO.save(mahasiswa);
+    mahasiswaRepository.persist(mahasiswa);
   }
 
   @ConsumeEvent(value = "processMahasiswa", blocking = true)

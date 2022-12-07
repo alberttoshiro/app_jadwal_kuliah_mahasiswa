@@ -7,9 +7,10 @@ import java.util.List;
 import java.util.UUID;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import com.albert.dao.JadwalKuliahDAO;
-import com.albert.dao.RuanganWaktuDAO;
+import javax.transaction.Transactional;
 import com.albert.model.RuanganWaktu;
+import com.albert.repository.JadwalKuliahRepository;
+import com.albert.repository.RuanganWaktuRepository;
 import com.albert.util.AppUtil;
 import org.jboss.logging.Logger;
 import io.quarkus.vertx.ConsumeEvent;
@@ -24,11 +25,12 @@ public class RuanganWaktuConsumer extends BaseConsumer {
   Logger log;
 
   @Inject
-  RuanganWaktuDAO ruanganWaktuDAO;
+  RuanganWaktuRepository ruanganWaktuRepository;
 
   @Inject
-  JadwalKuliahDAO jadwalKuliahDAO;
+  JadwalKuliahRepository jadwalKuliahRepository;
 
+  @Transactional
   @Override
   public void insert(String[] param) {
     if (param.length == 2) {
@@ -51,7 +53,8 @@ public class RuanganWaktuConsumer extends BaseConsumer {
     if (listWaktuMulai.size() > 0) {
       LocalDateTime startDate = listWaktuMulai.get(0);
       LocalDateTime endDate = listWaktuSelesai.get(0);
-      List<RuanganWaktu> listRuanganWaktu = ruanganWaktuDAO.findByDate(nomorRuangan, startDate);
+      List<RuanganWaktu> listRuanganWaktu =
+          ruanganWaktuRepository.findByDate(nomorRuangan, startDate);
       List<LocalDateTime> listSearchWaktuMulai = new ArrayList<>();
       List<LocalDateTime> listSearchWaktuSelesai = new ArrayList<>();
       for (RuanganWaktu ruanganWaktu : listRuanganWaktu) {
@@ -75,7 +78,7 @@ public class RuanganWaktuConsumer extends BaseConsumer {
       }
       RuanganWaktu ruanganWaktu =
           new RuanganWaktu(id, nomorRuangan, listWaktuMulai.get(i), listWaktuSelesai.get(i));
-      ruanganWaktuDAO.save(ruanganWaktu);
+      ruanganWaktuRepository.persist(ruanganWaktu);
     }
   }
 

@@ -3,9 +3,9 @@ package com.albert.mapper;
 import java.util.stream.Collectors;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import com.albert.dao.MatakuliahDAO;
 import com.albert.dto.MatakuliahMahasiswaDTO;
 import com.albert.model.Matakuliah;
+import com.albert.repository.MatakuliahRepository;
 
 @ApplicationScoped
 public class MatakuliahMahasiswaMapper {
@@ -17,11 +17,11 @@ public class MatakuliahMahasiswaMapper {
   MatakuliahMapper matakuliahMapper;
 
   @Inject
-  MatakuliahDAO matakuliahDAO;
+  MatakuliahRepository matakuliahRepository;
 
   public MatakuliahMahasiswaDTO toMatakuliahMahasiswaDTO(Matakuliah matakuliah) {
     return new MatakuliahMahasiswaDTO(matakuliahMapper.toMatakuliahDTO(matakuliah),
-        matakuliahDAO.getMahasiswa(matakuliah.getId()).stream()
+        matakuliahRepository.getMahasiswa(matakuliah.getId()).stream()
             .map(t -> mahasiswaMapper.toMahasiswaDTO(t)).collect(Collectors.toList()));
   }
 }

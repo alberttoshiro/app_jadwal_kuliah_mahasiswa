@@ -10,11 +10,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import com.albert.dao.MatakuliahDAO;
 import com.albert.dto.MatakuliahDTO;
 import com.albert.dto.MatakuliahMahasiswaDTO;
 import com.albert.mapper.MatakuliahMahasiswaMapper;
 import com.albert.mapper.MatakuliahMapper;
+import com.albert.repository.MatakuliahRepository;
 import org.jboss.logging.Logger;
 
 @Path("matakuliah")
@@ -25,7 +25,7 @@ public class MatakuliahEndpoint {
   Logger log;
 
   @Inject
-  MatakuliahDAO matakuliahDAO;
+  MatakuliahRepository matakuliahRepository;
 
   @Inject
   MatakuliahMapper matakuliahMapper;
@@ -36,14 +36,14 @@ public class MatakuliahEndpoint {
   @GET
   @Path("/")
   public List<MatakuliahDTO> getAllMatakuliah() {
-    return matakuliahDAO.getAll().stream().map(t -> matakuliahMapper.toMatakuliahDTO(t))
+    return matakuliahRepository.listAll().stream().map(t -> matakuliahMapper.toMatakuliahDTO(t))
         .collect(Collectors.toList());
   }
 
   @GET
   @Path("{id}")
   public MatakuliahDTO getById(@PathParam("id") String id) {
-    return matakuliahMapper.toMatakuliahDTO(matakuliahDAO.findById(UUID.fromString(id)));
+    return matakuliahMapper.toMatakuliahDTO(matakuliahRepository.findById(UUID.fromString(id)));
   }
 
   @GET
@@ -51,6 +51,6 @@ public class MatakuliahEndpoint {
   @Transactional
   public MatakuliahMahasiswaDTO getMatakuliahMahasiswaDTO(@PathParam("id") String id) {
     return matakuliahMahasiswaMapper
-        .toMatakuliahMahasiswaDTO(matakuliahDAO.findById(UUID.fromString(id)));
+        .toMatakuliahMahasiswaDTO(matakuliahRepository.findById(UUID.fromString(id)));
   }
 }

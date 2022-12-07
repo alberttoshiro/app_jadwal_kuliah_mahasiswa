@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import com.albert.dao.MahasiswaDAO;
 import org.jboss.logging.Logger;
 import io.quarkus.scheduler.Scheduled;
 import io.vertx.core.eventbus.EventBus;
@@ -16,9 +15,6 @@ public class AppScheduler {
   private static final String FOLDER_MASTER = ROOT + "master";
 
   private static final String FOLDER_COMPOSE = ROOT + "compose";
-
-  @Inject
-  MahasiswaDAO mahasiswaDAO;
 
   @Inject
   EventBus eventBus;
